@@ -1,0 +1,14 @@
+{
+    "id": "{C0F160B2-0B9D-2AAE-0527-C0FA4BDEE743}",
+    "name": "Discovergy_Smartmerter",
+    "type": 3,
+    "vendor": "elueckel",
+    "aliases": 
+    [
+        "Discovergy_Smartmerter"
+    ],
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "DSM"
+}
