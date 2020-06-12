@@ -1,0 +1,9 @@
+{
+	"translations": {
+		"de": { 
+			"Username": "Anmeldename",
+			"Password": "Passwort",
+			"Standard Timer": "Standard Interval"
+		}
+	}
+}
