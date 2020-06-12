@@ -1,0 +1,12 @@
+{
+    "id": "{C0F160B2-0B9D-2AAE-0527-C0FA4BDEE743}",
+    "name": "Discovergy Smartmeter",
+    "author": "elueckel",
+    "url": "https://github.com/elueckel/Discovergy_Smartmeter",
+    "compatibility": {
+        "version": "5.1"
+    },
+    "version": "1.0",
+    "build": 0,
+    "date": 0
+}
