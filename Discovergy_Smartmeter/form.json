@@ -1,0 +1,16 @@
+  
+{
+    "elements":
+    [
+    { "type": "Label", "label": "Discovergy Login Settings" },
+		{ "type": "ValidationTextBox", "name": "UserName", "caption": "User Name" },
+		{ "type": "ValidationTextBox", "name": "Password", "caption": "Password" },
+		{ "type": "CheckBox", "name": "Debug", "caption": "Debug" },		
+		{ "type": "Label", "label": "Update Timer (0 = off)" },
+		{ "type": "IntervalBox", "name": "Timer", "caption": "Timer" }
+    ],
+	  "actions":
+	  [
+		{ "type": "Button", "label": "Test download of data", "onClick": "WUPWSS_Forecast($id);" }
+  	]
+}
