@@ -11,6 +11,7 @@
     ],
 	  "actions":
 	  [
-		{ "type": "Button", "label": "Test download of data", "onClick": "WUPWSS_Forecast($id);" }
+		{ "type": "Button", "label": "Get Meters", "onClick": "DSM_GetMeters($id);" },
+		{ "type": "Button", "label": "Get Meter Reading", "onClick": "DSM_GetMeterReading($id);" }
   	]
 }

@@ -29,9 +29,8 @@ if (!defined('vtBoolean')) {
 			
 												
 			//Component sets timer, but default is OFF
-			$this->RegisterTimer("UpdateTimer",0,"DSM_DiscovergySmartMeter(\$_IPS['TARGET']);");
+			$this->RegisterTimer("GetMeterReading",0,"DSM_GetMeterReading(\$_IPS['TARGET']);");
 					
-	
 		}
 	
 	public function ApplyChanges()
@@ -44,7 +43,7 @@ if (!defined('vtBoolean')) {
 		//Timers Update - if greater than 0 = On
 		
 		$TimerMS = $this->ReadPropertyInteger("Timer") * 1000;
-		$this->SetTimerInterval("UpdateTimer",$TimerMS);
+		$this->SetTimerInterval("GetMeterReading",$TimerMS);
 					
 		$vpos = 15;			
 			
@@ -52,19 +51,24 @@ if (!defined('vtBoolean')) {
 				
 			
 	}
-	
 		
-	public function DNSUpdate()
+	public function GetMeterReading()
 	{
 		
-			$RootDomain = $this->ReadPropertyString("RootDomain");
-			$ARecord = $this->ReadPropertyString("ARecord");
-			$Key = $this->ReadPropertyString("APIKey");
-			$Secret = $this->ReadPropertyString("Secret");
-			$IPInfoToken = $this->ReadPropertyString("IPInfoToken");
-			$DNSUpdate = $this->ReadPropertyBoolean("DNSUpdate");
-			$PublicIPVariable = $this->ReadPropertyBoolean("PublicIPVariable");
-			$Debug = $this->ReadPropertyBoolean("Debug");	
+		$UserName = $this->ReadPropertyString("UserName");
+		$Password = $this->ReadPropertyString("Password");
+			
+			
+	}
+
+	public function GetMeters()
+	{
+		
+		$UserName = $this->ReadPropertyString("UserName");
+		$Password = $this->ReadPropertyString("Password");
+
+		
+			
 			
 	}
 		
