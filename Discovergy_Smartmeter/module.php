@@ -51,7 +51,7 @@ if (!defined('vtBoolean')) {
 		$username = $this->ReadPropertyString("UserName");
 		$password = $this->ReadPropertyString("Password");
 
-		if ($username !== "") {
+		if (($username !== "") AND ($password !== "")) {
 			
 			$curl = curl_init('https://api.discovergy.com/public/v1/meters');
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
