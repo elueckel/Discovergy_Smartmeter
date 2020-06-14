@@ -10,7 +10,7 @@ if (!defined('vtBoolean')) {
 }
 
 
-	class Discovergy_Module extends IPSModule
+	class Discovergy_Smartmeter extends IPSModule
 	
 	{
 		
@@ -55,8 +55,8 @@ if (!defined('vtBoolean')) {
 	public function GetMeterReading()
 	{
 		
-		$UserName = $this->ReadPropertyString("UserName");
-		$Password = $this->ReadPropertyString("Password");
+		$username = $this->ReadPropertyString("UserName");
+		$password = $this->ReadPropertyString("Password");
 			
 			
 	}
@@ -98,7 +98,7 @@ if (!defined('vtBoolean')) {
 			}
 
 			//SetValue($ID_serialnumber,$meterid);
-			SetValue($this->GetIDForIdent($ID_serialnumber, $meterid);	
+			SetValue($this->GetIDForIdent($ID_serialnumber), $meterid);	
 
 			$manufacturerId = $meter->manufacturerId;
 			//echo $manufacturerId;
@@ -111,8 +111,9 @@ if (!defined('vtBoolean')) {
 			}
 
 			//SetValue($ID_manufacturerId,$manufacturerId);
-			SetValue($this->GetIDForIdent($ID_manufacturerId, $manufacturerId);		
+			SetValue($this->GetIDForIdent($ID_manufacturerId), $manufacturerId);		
 					
-			}
+		}
+	}
 		
 }
