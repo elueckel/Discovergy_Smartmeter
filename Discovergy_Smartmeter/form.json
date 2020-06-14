@@ -4,14 +4,12 @@
     [
     { "type": "Label", "label": "Discovergy Login Settings" },
 		{ "type": "ValidationTextBox", "name": "UserName", "caption": "User Name" },
-		{ "type": "ValidationTextBox", "name": "Password", "caption": "Password" },
-		{ "type": "CheckBox", "name": "Debug", "caption": "Debug" },		
+		{ "type": "PasswordTextBox", "name": "Password", "caption": "Password" },	
 		{ "type": "Label", "label": "Update Timer (0 = off)" },
-		{ "type": "IntervalBox", "name": "Timer", "caption": "Timer" }
+		{ "type": "NumberSpinner", "name": "Timer", "caption": "Request Timer", "suffix": "seconds", "minimum": 0}
     ],
 	  "actions":
 	  [
-		{ "type": "Button", "label": "Get Meters", "onClick": "DSM_GetMeters($id);" },
 		{ "type": "Button", "label": "Get Meter Reading", "onClick": "DSM_GetMeterReading($id);" }
   	]
 }

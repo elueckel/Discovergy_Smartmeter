@@ -26,6 +26,20 @@ if (!defined('vtBoolean')) {
 			$this->RegisterPropertyString("Password","");
 			$this->RegisterPropertyInteger("Timer", 0);
 			$this->RegisterPropertyBoolean("Debug", 0);
+
+			if (IPS_VariableProfileExists("DSM.Watt") == false) {
+				IPS_CreateVariableProfile("DSM.Watt", 2);
+				IPS_SetVariableProfileIcon("DSM.Watt", "Electricity");
+				IPS_SetVariableProfileDigits("DSM.Watt", 2);
+				IPS_SetVariableProfileText("DSM.Watt", "", " W");
+			}
+
+			if (IPS_VariableProfileExists("DSM.WattK") == false) {
+				IPS_CreateVariableProfile("DSM.WattK", 2);
+				IPS_SetVariableProfileIcon("DSM.WattK", "Electricity");
+				IPS_SetVariableProfileDigits("DSM.WattK", 2);
+				IPS_SetVariableProfileText("DSM.WattK", "", " kW");
+			}
 			
 			$this->RegisterVariableInteger('MeterCount', $this->Translate('Meter Count'));	
 			//Component sets timer, but default is OFF
@@ -77,30 +91,28 @@ if (!defined('vtBoolean')) {
 				$manufacturerId = $meter->manufacturerId;
 				//echo $meterid;
 			
-				$this->MaintainVariable($i.'meterID', $i.$this->Translate(' Meter Serialnumber'), vtString, '', $vpos++, isset($meter));
+				$this->MaintainVariable($i.'meterID', $this->Translate('Meter ').$i.$this->Translate(' Serialnumber'), vtString, '', $vpos++, isset($meter));
 				SetValue($this->GetIDForIdent($i.'meterID'), $meterid);
-				$this->MaintainVariable($i.'manufacturerId', $i.$this->Translate(' Meter Manufacturer'), vtString, '', $vpos++, isset($meter));
+				$this->MaintainVariable($i.'manufacturerId', $this->Translate('Meter ').$i.$this->Translate(' Manufacturer'), vtString, '', $vpos++, isset($meter));
 				SetValue($this->GetIDForIdent($i.'manufacturerId'), $manufacturerId);
 
 				if ($manufacturerId == "ESY") {
-
-					$this->MaintainVariable($i.'energy', $i.$this->Translate(' Meter Energy Bought'), vtFloat, '', $vpos++, isset($meter));
-					$this->MaintainVariable($i.'energyout', $i.$this->Translate(' Meter Energy Sold'), vtFloat, '', $vpos++, isset($meter));
-					$this->MaintainVariable($i.'consumption', $i.$this->Translate(' Meter Current Consumption'), vtFloat, '', $vpos++, isset($meter));
-					$this->MaintainVariable($i.'phase1', $i.$this->Translate(' Phase 1'), vtFloat, '', $vpos++, isset($meter));
-					$this->MaintainVariable($i.'phase2', $i.$this->Translate(' Phase 2'), vtFloat, '', $vpos++, isset($meter));
-					$this->MaintainVariable($i.'phase3', $i.$this->Translate(' Phase 3'), vtFloat, '', $vpos++, isset($meter));
-					$this->MaintainVariable($i.'voltage1', $i.$this->Translate(' Voltage 1'), vtFloat, '~Volt', $vpos++, isset($meter));
-					$this->MaintainVariable($i.'voltage2', $i.$this->Translate(' Voltage 2'), vtFloat, '~Volt', $vpos++, isset($meter));
-					$this->MaintainVariable($i.'voltage3', $i.$this->Translate(' Voltage 3'), vtFloat, '~Volt', $vpos++, isset($meter));					
+					$this->MaintainVariable($i.'energy', $this->Translate('Meter ').$i.$this->Translate(' Energy Bought'), vtFloat, 'DSM.WattK', $vpos++, isset($meter));
+					$this->MaintainVariable($i.'energyout', $this->Translate('Meter ').$i.$this->Translate(' Energy Sold'), vtFloat, 'DSM.WattK', $vpos++, isset($meter));
+					$this->MaintainVariable($i.'consumption', $this->Translate('Meter ').$i.$this->Translate(' Current Consumption'), vtFloat, 'DSM.WattK', $vpos++, isset($meter));
+					$this->MaintainVariable($i.'phase1', $this->Translate('Meter ').$i.$this->Translate(' Phase 1'), vtFloat, 'DSM.Watt', $vpos++, isset($meter));
+					$this->MaintainVariable($i.'phase2', $this->Translate('Meter ').$i.$this->Translate(' Phase 2'), vtFloat, 'DSM.Watt', $vpos++, isset($meter));
+					$this->MaintainVariable($i.'phase3', $this->Translate('Meter ').$i.$this->Translate(' Phase 3'), vtFloat, 'DSM.Watt', $vpos++, isset($meter));
+					$this->MaintainVariable($i.'voltage1', $this->Translate('Meter ').$i.$this->Translate(' Voltage Phase 1'), vtFloat, '~Volt', $vpos++, isset($meter));
+					$this->MaintainVariable($i.'voltage2', $this->Translate('Meter ').$i.$this->Translate(' Voltage Phase 2'), vtFloat, '~Volt', $vpos++, isset($meter));
+					$this->MaintainVariable($i.'voltage3', $this->Translate('Meter ').$i.$this->Translate(' Voltage Phase 3'), vtFloat, '~Volt', $vpos++, isset($meter));					
 		
 				}
 		
 				else if ($manufacturerId == "EMH") {
-		
-					$this->MaintainVariable($i.'effective_power_complete', $i.$this->Translate(' Effective Power Complete'), vtFloat, '', $vpos++, isset($meter));
-					$this->MaintainVariable($i.'effective_power_main', $i.$this->Translate(' Effective Power Main Time'), vtFloat, '', $vpos++, isset($meter));
-					$this->MaintainVariable($i.'effective_power_secondary', $i.$this->Translate(' Effective Power Secondary Time'), vtFloat, '', $vpos++, isset($meter));
+					$this->MaintainVariable($i.'effective_power_complete', $this->Translate('Meter ').$i.$this->Translate(' Effective Power Complete'), vtFloat, 'DSM.WattK', $vpos++, isset($meter));
+					$this->MaintainVariable($i.'effective_power_main', $this->Translate('Meter ').$i.$this->Translate(' Effective Power Main Time'), vtFloat, 'DSM.WattK', $vpos++, isset($meter));
+					$this->MaintainVariable($i.'effective_power_secondary', $this->Translate('Meter ').$i.$this->Translate(' Effective Power Secondary Time'), vtFloat, 'DSM.WattK', $vpos++, isset($meter));
 				}	
 				
 				SetValue($this->GetIDForIdent('MeterCount'), $i);

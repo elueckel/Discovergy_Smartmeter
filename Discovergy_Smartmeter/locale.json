@@ -1,9 +1,25 @@
 {
 	"translations": {
-		"de": { 
-			"Username": "Anmeldename",
+		"de": {
+			"Discovergy Login Settings": "Discovergy Login Daten", 
+			"User Name": "Anmeldename",
 			"Password": "Passwort",
-			"Standard Timer": "Standard Interval"
+			"Request Timer": "Abrufinterval",
+			"seconds": "Sekunden",
+			"Meter ": "Zähler",
+			" Serialnumber": " Seriennummer",
+			" Manufacturer": " Hersteller",
+			" Energy Bought": " Strom Bezug",
+			" Energy Sold": " Strom Einspeisung",
+			" Current Consumption": " Aktueller Verbrauch",
+			" Voltage Phase 1": " Spannng Phase 1",
+			" Voltage Phase 2": " Spannng Phase 2",
+			" Voltage Phase 3": " Spannng Phase 3",
+			" Effective Power Complete": " Wirkleistung Komplett",
+			" Effective Power Main Time": " Wirkleistung Hauptzeit",
+			" Effective Power Secondary Time": " Wirkleistung Nebenzeit",
+			"Meter Count": "Zähler Anzahl",
+			"Get Meter Reading": "Zähler Abfragen"
 		}
 	}
 }
