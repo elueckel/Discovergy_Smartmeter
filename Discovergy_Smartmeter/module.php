@@ -38,7 +38,7 @@ if (!defined('vtBoolean')) {
 				IPS_CreateVariableProfile("DSM.WattK", 2);
 				IPS_SetVariableProfileIcon("DSM.WattK", "Electricity");
 				IPS_SetVariableProfileDigits("DSM.WattK", 2);
-				IPS_SetVariableProfileText("DSM.WattK", "", " kW");
+				IPS_SetVariableProfileText("DSM.WattK", "", " kWh");
 			}
 			
 			$this->RegisterVariableInteger('MeterCount', $this->Translate('Meter Count'));	
@@ -155,11 +155,11 @@ if (!defined('vtBoolean')) {
 			if ($manufacturerId == "ESY") {
 				
 				$energy_raw = $data->values->energy;
-				$energy = $energy_raw / 1000000000;
+				$energy = $energy_raw / 10000000000;
 				SetValue($this->GetIDForIdent($i.'energy'), $energy);
 
 				$energyout_raw = $data->values->energyOut;
-				$energyout = $energyout_raw / 1000000000;
+				$energyout = $energyout_raw / 10000000000;
 				SetValue($this->GetIDForIdent($i.'energyout'), $energyout);
 
 				$consumption_raw = $data->values->power;
