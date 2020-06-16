@@ -114,6 +114,10 @@ if (!defined('vtBoolean')) {
 					$this->MaintainVariable($i.'effective_power_main', $this->Translate('Meter ').$i.$this->Translate(' Effective Power Main Time'), vtFloat, 'DSM.WattK', $vpos++, isset($meter));
 					$this->MaintainVariable($i.'effective_power_secondary', $this->Translate('Meter ').$i.$this->Translate(' Effective Power Secondary Time'), vtFloat, 'DSM.WattK', $vpos++, isset($meter));
 				}	
+
+				else if ($manufacturerId == "ELS") {
+					$this->MaintainVariable($i.'gas_usage', $this->Translate('Meter ').$i.$this->Translate(' Gas Usage'), vtFloat, '~Gas', $vpos++, isset($meter));
+				}	
 				
 				SetValue($this->GetIDForIdent('MeterCount'), $i);
 			}
@@ -206,7 +210,16 @@ if (!defined('vtBoolean')) {
 				$effective_power_secondary = $effective_power_secondary_raw / 1000000;
 				SetValue($this->GetIDForIdent($i.'effective_power_secondary'), $effective_power_secondary);
 				
-			}	
+			}
+			
+			else if ($manufacturerId == "ELS") {
+				
+				$gas_raw = $data->values->volume;
+				$gas_usage = $gas_raw / 1000;
+				SetValue($this->GetIDForIdent($i.'gas_usage'), $gas_usage);
+					
+			}
+
 		}		
 	}
 		
