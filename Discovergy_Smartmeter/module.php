@@ -89,10 +89,13 @@ if (!defined('vtBoolean')) {
 
 				$meterid = $meter->meterId;
 				$manufacturerId = $meter->manufacturerId;
+				$serialnumber = $meter->serialNumber;
 				//echo $meterid;
 			
-				$this->MaintainVariable($i.'meterID', $this->Translate('Meter ').$i.$this->Translate(' Serialnumber'), vtString, '', $vpos++, isset($meter));
+				$this->MaintainVariable($i.'meterID', $this->Translate('Meter ').$i.$this->Translate(' ID'), vtString, '', $vpos++, isset($meter));
 				SetValue($this->GetIDForIdent($i.'meterID'), $meterid);
+				$this->MaintainVariable($i.'serialnumber', $this->Translate('Meter ').$i.$this->Translate(' Serialnumber'), vtString, '', $vpos++, isset($meter));
+				SetValue($this->GetIDForIdent($i.'serialnumer'), $serialnumber);
 				$this->MaintainVariable($i.'manufacturerId', $this->Translate('Meter ').$i.$this->Translate(' Manufacturer'), vtString, '', $vpos++, isset($meter));
 				SetValue($this->GetIDForIdent($i.'manufacturerId'), $manufacturerId);
 
