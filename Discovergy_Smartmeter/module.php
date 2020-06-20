@@ -97,7 +97,6 @@ if (!defined('vtBoolean')) {
 				$locationCity = $meter->location->city;
 				$locationCountry = $meter->location->country;
 				$meterlocation = $locationStreet." ".$locationStreetNumber." ".$locationzip." ".$locationCity." ".$locationCountry;
-				//echo $meterid;
 				$this->MaintainVariable($i.'meterlocation', $this->Translate('Meter ').$i.$this->Translate(' Location'), vtString, '', $vpos++, isset($meter));
 				SetValue($this->GetIDForIdent($i.'meterlocation'), $meterlocation);
 				$this->MaintainVariable($i.'fullSerialNumber', $this->Translate('Meter ').$i.$this->Translate(' Full Serialnumber'), vtString, '', $vpos++, isset($meter));
