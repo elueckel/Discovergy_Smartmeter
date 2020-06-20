@@ -1,13 +1,15 @@
 {
 	"translations": {
 		"de": {
-			"Discovergy Login Settings": "Discovergy Login Daten", 
+			"Meter Portal Login Settings": "Zählerportal Login Daten", 
 			"User Name": "Anmeldename",
 			"Password": "Passwort",
 			"Request Timer": "Abrufinterval",
 			"seconds": "Sekunden",
 			"Meter ": "Zähler",
 			" Serialnumber": " Seriennummer",
+			" Full Serialnumber": " Komplette Seriennummer",
+			" Location": " Standort",
 			" Manufacturer": " Hersteller",
 			" Energy Bought": " Strom Bezug",
 			" Energy Sold": " Strom Einspeisung",

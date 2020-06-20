@@ -2,7 +2,7 @@
 {
     "elements":
     [
-    { "type": "Label", "label": "Discovergy Login Settings" },
+    { "type": "Label", "label": "Meter Portal Login Settings" },
 		{ "type": "ValidationTextBox", "name": "UserName", "caption": "User Name" },
 		{ "type": "PasswordTextBox", "name": "Password", "caption": "Password" },	
 		{ "type": "Label", "label": "Update Timer (0 = off)" },
