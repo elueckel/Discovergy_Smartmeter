@@ -115,7 +115,7 @@ if (!defined('vtBoolean')) {
 				if ($manufacturerId == "ESY") {
 					$this->MaintainVariable($i.'energy', $this->Translate('Meter ').$i.$this->Translate(' Energy Bought'), vtFloat, 'DSM.WattK', $vpos++, isset($meter));
 					$this->MaintainVariable($i.'energyout', $this->Translate('Meter ').$i.$this->Translate(' Energy Sold'), vtFloat, 'DSM.WattK', $vpos++, isset($meter));
-					$this->MaintainVariable($i.'consumption', $this->Translate('Meter ').$i.$this->Translate(' Current Consumption'), vtFloat, 'DSM.WattK', $vpos++, isset($meter));
+					$this->MaintainVariable($i.'power', $this->Translate('Meter ').$i.$this->Translate(' Current Power'), vtFloat, 'DSM.WattK', $vpos++, isset($meter));
 					$this->MaintainVariable($i.'phase1', $this->Translate('Meter ').$i.$this->Translate(' Phase 1'), vtFloat, 'DSM.Watt', $vpos++, isset($meter));
 					$this->MaintainVariable($i.'phase2', $this->Translate('Meter ').$i.$this->Translate(' Phase 2'), vtFloat, 'DSM.Watt', $vpos++, isset($meter));
 					$this->MaintainVariable($i.'phase3', $this->Translate('Meter ').$i.$this->Translate(' Phase 3'), vtFloat, 'DSM.Watt', $vpos++, isset($meter));
@@ -131,7 +131,8 @@ if (!defined('vtBoolean')) {
 					$this->MaintainVariable($i.'effective_power_secondary', $this->Translate('Meter ').$i.$this->Translate(' Effective Power Secondary Time'), vtFloat, 'DSM.WattK', $vpos++, isset($meter));
 					$this->MaintainVariable($i.'sold_power_complete', $this->Translate('Meter ').$i.$this->Translate(' Sold Power Complete'), vtFloat, 'DSM.WattK', $vpos++, isset($meter));
 					$this->MaintainVariable($i.'sold_power_main', $this->Translate('Meter ').$i.$this->Translate(' Sold Power Main Time'), vtFloat, 'DSM.WattK', $vpos++, isset($meter));
-					$this->MaintainVariable($i.'sold_power_secondary', $this->Translate('Meter ').$i.$this->Translate(' Sold Power Secondary Time'), vtFloat, 'DSM.WattK', $vpos++, isset($meter));					
+					$this->MaintainVariable($i.'sold_power_secondary', $this->Translate('Meter ').$i.$this->Translate(' Sold Power Secondary Time'), vtFloat, 'DSM.WattK', $vpos++, isset($meter));	
+					$this->MaintainVariable($i.'current_power', $this->Translate('Meter ').$i.$this->Translate(' Current Power'), vtFloat, 'DSM.WattK', $vpos++, isset($meter));				
 				}	
 
 				else if ($manufacturerId == "ELS") {
@@ -185,9 +186,9 @@ if (!defined('vtBoolean')) {
 				$energyout = $energyout_raw / 10000000000;
 				SetValue($this->GetIDForIdent($i.'energyout'), $energyout);
 
-				$consumption_raw = $data->values->power;
-				$consumption = $consumption_raw / 1000;
-				SetValue($this->GetIDForIdent($i.'consumption'), $consumption);
+				$power_raw = $data->values->power;
+				$power = $power_raw / 1000;
+				SetValue($this->GetIDForIdent($i.'power'), $power);
 
 				$phase1_raw = $data->values->power1;
 				$phase1 = $phase1_raw / 1000;
@@ -240,6 +241,10 @@ if (!defined('vtBoolean')) {
 				$sold_power_secondary_raw = $data->values->{'2.8.2'};
 				$sold_power_secondary = $sold_power_secondary_raw / 1000000;
 				SetValue($this->GetIDForIdent($i.'sold_power_secondary'), $sold_power_secondary);
+
+				$current_power_raw = $data->values->{'1.25'};
+				$current_power = $current_power_raw / 1000;
+				SetValue($this->GetIDForIdent($i.'current_power'), $current_power);
 				
 			}
 			
