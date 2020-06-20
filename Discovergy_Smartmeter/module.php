@@ -90,14 +90,27 @@ if (!defined('vtBoolean')) {
 				$meterid = $meter->meterId;
 				$manufacturerId = $meter->manufacturerId;
 				$serialnumber = $meter->serialNumber;
+				$fullSerialNumber = $meter->fullSerialNumber;
+				$locationStreet = $meter->location->street;
+				$locationStreetNumber = $meter->location->streetNumber;
+				$locationzip = $meter->location->zip;
+				$locationCity = $meter->location->city;
+				$locationCountry = $meter->location->country;
+				$meterlocation = $locationStreet." ".$locationStreetNumber." ".$locationzip." ".$locationCity." ".$locationCountry;
 				//echo $meterid;
-			
+				$this->MaintainVariable($i.'meterlocation', $this->Translate('Meter ').$i.$this->Translate(' Location'), vtString, '', $vpos++, isset($meter));
+				SetValue($this->GetIDForIdent($i.'meterlocation'), $meterlocation);
+				$this->MaintainVariable($i.'fullSerialNumber', $this->Translate('Meter ').$i.$this->Translate(' Full Serialnumber'), vtString, '', $vpos++, isset($meter));
+				SetValue($this->GetIDForIdent($i.'fullSerialNumber'), $fullSerialNumber);
+				$this->MaintainVariable($i.'serialnumber', $this->Translate('Meter ').$i.$this->Translate(' Serialnumber'), vtString, '', $vpos++, isset($meter));
+				SetValue($this->GetIDForIdent($i.'serialnumber'), $serialnumber);
 				$this->MaintainVariable($i.'meterID', $this->Translate('Meter ').$i.$this->Translate(' ID'), vtString, '', $vpos++, isset($meter));
 				SetValue($this->GetIDForIdent($i.'meterID'), $meterid);
 				$this->MaintainVariable($i.'serialnumber', $this->Translate('Meter ').$i.$this->Translate(' Serialnumber'), vtString, '', $vpos++, isset($meter));
 				SetValue($this->GetIDForIdent($i.'serialnumber'), $serialnumber);
 				$this->MaintainVariable($i.'manufacturerId', $this->Translate('Meter ').$i.$this->Translate(' Manufacturer'), vtString, '', $vpos++, isset($meter));
 				SetValue($this->GetIDForIdent($i.'manufacturerId'), $manufacturerId);
+				
 
 				if ($manufacturerId == "ESY") {
 					$this->MaintainVariable($i.'energy', $this->Translate('Meter ').$i.$this->Translate(' Energy Bought'), vtFloat, 'DSM.WattK', $vpos++, isset($meter));
