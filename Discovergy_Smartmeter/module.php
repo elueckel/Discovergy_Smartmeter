@@ -116,6 +116,9 @@ if (!defined('vtBoolean')) {
 					$this->MaintainVariable($i.'effective_power_complete', $this->Translate('Meter ').$i.$this->Translate(' Effective Power Complete'), vtFloat, 'DSM.WattK', $vpos++, isset($meter));
 					$this->MaintainVariable($i.'effective_power_main', $this->Translate('Meter ').$i.$this->Translate(' Effective Power Main Time'), vtFloat, 'DSM.WattK', $vpos++, isset($meter));
 					$this->MaintainVariable($i.'effective_power_secondary', $this->Translate('Meter ').$i.$this->Translate(' Effective Power Secondary Time'), vtFloat, 'DSM.WattK', $vpos++, isset($meter));
+					$this->MaintainVariable($i.'sold_power_complete', $this->Translate('Meter ').$i.$this->Translate(' Sold Power Complete'), vtFloat, 'DSM.WattK', $vpos++, isset($meter));
+					$this->MaintainVariable($i.'sold_power_main', $this->Translate('Meter ').$i.$this->Translate(' Sold Power Main Time'), vtFloat, 'DSM.WattK', $vpos++, isset($meter));
+					$this->MaintainVariable($i.'sold_power_secondary', $this->Translate('Meter ').$i.$this->Translate(' Sold Power Secondary Time'), vtFloat, 'DSM.WattK', $vpos++, isset($meter));					
 				}	
 
 				else if ($manufacturerId == "ELS") {
@@ -212,6 +215,18 @@ if (!defined('vtBoolean')) {
 				$effective_power_secondary_raw = $data->values->{'1.8.2'};
 				$effective_power_secondary = $effective_power_secondary_raw / 1000000;
 				SetValue($this->GetIDForIdent($i.'effective_power_secondary'), $effective_power_secondary);
+
+				$sold_power_complete_raw = $data->values->{'2.8.0'};
+				$sold_power_complete = $sold_power_complete_raw / 1000000;
+				SetValue($this->GetIDForIdent($i.'sold_power_complete'), $sold_power_complete);
+
+				$sold_power_main_raw = $data->values->{'2.8.1'};
+				$sold_power_main = $sold_power_main_raw / 1000000;
+				SetValue($this->GetIDForIdent($i.'sold_power_main'), $sold_power_main);
+
+				$sold_power_secondary_raw = $data->values->{'2.8.2'};
+				$sold_power_secondary = $sold_power_secondary_raw / 1000000;
+				SetValue($this->GetIDForIdent($i.'sold_power_secondary'), $sold_power_secondary);
 				
 			}
 			
