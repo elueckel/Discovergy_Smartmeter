@@ -12,8 +12,13 @@ Daten Wärmepumpe:
 Daten Einspeisezähler: 
 * Zählerstand Bezug/Einspeisung
 * Verbrauch Aktuell 
-* Verbruach Phase 1-3
+* Verbrauch Phase 1-3
 * Spannung Phase 1-3
+
+## Version 1.01 (25.06.2020)
+* Abfragen von Gaszähler
+* Erweiterte Variablen von EMH Zähler
+* CURL Timeout hinzugefügt
 
 Sollten weitere Zähler benötigt werden bitte hier posten. Für den Einbau benötige ich 'manufacturerId' und evtl. ein Beispiel JSON. Bitte melden. Ich denke für einen Gaszähler wäre es noch spannend.
 
