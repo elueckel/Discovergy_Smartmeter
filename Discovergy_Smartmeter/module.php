@@ -71,7 +71,7 @@ if (!defined('vtBoolean')) {
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
 			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
-			curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+			curl_setopt($curl, CURLOPT_TIMEOUT, 5);
 			curl_setopt($curl, CURLOPT_USERPWD, "$username:$password");
 			curl_setopt($curl, CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
 
@@ -167,7 +167,7 @@ if (!defined('vtBoolean')) {
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
 			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
-			curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+			curl_setopt($curl, CURLOPT_TIMEOUT, 5);
 			curl_setopt($curl, CURLOPT_USERPWD, "$username:$password");
 			curl_setopt($curl, CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
 	
