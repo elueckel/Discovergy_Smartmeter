@@ -15,7 +15,7 @@ Daten Einspeisezähler:
 * Verbrauch Phase 1-3
 * Spannung Phase 1-3
 
-## Version 1.01 (25.06.2020)
+## Version 1.01 (25.06.2020) - Release im Module Store
 * Abfragen von Gaszähler
 * Erweiterte Variablen von EMH Zähler
 * CURL Timeout hinzugefügt
