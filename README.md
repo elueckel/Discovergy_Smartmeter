@@ -1,7 +1,7 @@
 # Discovergy Smartmeter
 Das Modul ermöglicht das Abfragen von Daten aus dem Discovergy Portal. Getestet wurde es mit dem OEM von ComMetering, wobei es mit allen Integrationen funktionieren sollte.
 
-## Konfiguration
+## Konfiguration 1.01
 Um das Modul nutzen zu können ist ein Account bei Discovery oder einer deren OEMs (z.B. ComMetering) und ein hier verbundener Smartmeter von nöten. Anhand der Login Daten werden alle Smartmeter in Symcon eingerichtet und stehene dort mit den unten genannten Informationen zur Verfügung. 
 Um langfristig Daten auszuwerten, sollte die Archivfunktion für die Variablen nach Einrichtung aktiviert werden (Zähler bei Bezügen und Einspeisung, sonst Standard). 
 
