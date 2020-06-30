@@ -2,11 +2,13 @@
     "id": "{C0F160B2-0B9D-2AAE-0527-C0FA4BDEE743}",
     "name": "Discovergy_Smartmeter",
     "type": 3,
-    "vendor": "elueckel",
+    "vendor": "Discovergy",
     "aliases": 
     [
         "Discovergy Smartmeter",
-        "ComMetering Smartmeter"
+        "ComMetering Smartmeter",
+        "aWATTar Smartmeter",
+        "eprimo Smartmeter"
     ],
     "parentRequirements": [],
     "childRequirements": [],
