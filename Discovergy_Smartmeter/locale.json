@@ -6,6 +6,7 @@
 			"Password": "Passwort",
 			"Request Timer": "Abrufinterval",
 			"seconds": "Sekunden",
+			"Update Timer (0 = off)": "Updateinterval (0 = aus)",
 			"Meter ": "Zähler",
 			" Serialnumber": " Seriennummer",
 			" Full Serialnumber": " Komplette Seriennummer",
