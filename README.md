@@ -20,9 +20,15 @@ Daten Einspeisezähler:
 * Verbrauch Phase 1-3
 * Spannung Phase 1-3
 
-## Version 1.01 (30.06.2020) - Release im Module Store
+## Version 1.01 (30.06.2020)
 * Abfragen von Gaszähler
 * Erweiterte Variablen von EMH Zähler
 * CURL Timeout hinzugefügt
+
+## Version 2.0 (10.07.2020)
+* Komplett neuer Aufbau mit einem Smartmeter pro Komponente
+* Einrichtung durch manuelles setzen der UID pro Smartmeter (wird zur Verfügung gestellt)
+* Berechnung der Kosten oder Erlöse 
+* Integration von aWATTar für die dynamische Berechnung von Stromkosten
 
 Sollten weitere Zähler benötigt werden bitte im Forum https://www.symcon.de/forum/threads/43805-Modul-Discovergy-Smartmeter-die-zweite-f%C3%BCr-Module-Store?highlight=smartmeter  posten. Für den Einbau benötige ich 'manufacturerId' und evtl. ein Beispiel JSON. Bitte melden.
