@@ -382,11 +382,9 @@ if (!defined('vtBoolean')) {
 
 		$ConsumptionMainaWATTar = $this->ReadPropertyBoolean("ConsumptionMainaWATTar");
 		$CurrentTimer = $this->GetTimerInterval("QueryAWATTAR");
-		if ($CurrentTimer > 0 AND $ConsumptionMainaWATTar == 1) {
-			$this->SetTimerInterval("QueryAWATTAR",3600000);
+		if (($CurrentTimer > 0) AND ($ConsumptionMainaWATTar == 1)) {
+			$this->SetTimerInterval("QueryAWATTAR", 3600000);
 		}
-
-
 	}
 
 	public function CalculateCosts() {
