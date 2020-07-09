@@ -20,9 +20,16 @@ The interval determins how often data should be downloaded from the Discovergy P
 * Consumption Phase 1-3
 * Voltage Phase 1-3
 
-## Version 1.01 (25.06.2020) - Release in Module Store
+## Version 1.01 (25.06.2020)
 * Reading of Gasmeter in m³
 * Enhanced variables for EMH Meter
 * Added CURL Timeout
+
+## Version 2.0 (10.07.2020)
+* Complete re-write using one instance per meter
+* Manuell setup via meter UID (provided by component)
+* Calculation of cost and earnings (PV)
+* Integration of aWATTar smart tarifs
+
 
 For other unsupported meters, please post a message into the forum: https://www.symcon.de/forum/threads/43805-Modul-Discovergy-Smartmeter-die-zweite-f%C3%BCr-Module-Store?highlight=smartmeter
