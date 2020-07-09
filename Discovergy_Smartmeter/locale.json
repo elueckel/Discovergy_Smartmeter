@@ -17,6 +17,7 @@
 			"Manufacturer": "Hersteller",
 			"Energy Bought": "Strom Bezug",
 			"Energy Sold": "Strom Einspeisung",
+			"Meter Location": "Smartmeter Standort",
 			"Current Consumption": "Aktueller Verbrauch",
 			"Voltage Phase 1": "Spannng Phase 1",
 			"Voltage Phase 2": "Spannng Phase 2",
