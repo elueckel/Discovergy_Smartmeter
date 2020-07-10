@@ -394,6 +394,7 @@ if (!defined('vtBoolean')) {
 	public function CalculateCosts() {
 		
 		$manufacturerId = GetValue($this->GetIDForIdent('manufacturerId'));
+		$CostCalculatorInterval = GetValue($this->GetIDForIdent('CostCalculatorInterval'));
 
 		if ($manufacturerId == "ESY") {
 
