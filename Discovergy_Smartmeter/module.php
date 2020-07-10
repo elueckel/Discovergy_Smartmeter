@@ -59,7 +59,7 @@ if (!defined('vtBoolean')) {
 			//Component sets timer, but default is OFF
 			$this->RegisterTimer("GetMeterReading",0,"DSM_GetMeterReading(\$_IPS['TARGET']);");
 			$this->RegisterTimer("QueryAWATTAR",0,"DSM_QueryAWATTAR(\$_IPS['TARGET']);");
-			$this->RegisterTimer("CalculateCost",0,"DSM_CalculateCost(\$_IPS['TARGET']);");
+			$this->RegisterTimer("CalculateCosts",0,"DSM_CalculateCosts(\$_IPS['TARGET']);");
 
 			$ConsumptionMainaWATTar = $this->ReadPropertyBoolean("ConsumptionMainaWATTar");
 			if ($ConsumptionMainaWATTar == 1) {
@@ -98,7 +98,7 @@ if (!defined('vtBoolean')) {
 		$this->SetTimerInterval("GetMeterReading",$TimerMS);
 
 		$TimerMin = $this->ReadPropertyInteger("CostCalculator") * 1000 * 60;
-		$this->SetTimerInterval("CalculateCost",$TimerMin);
+		$this->SetTimerInterval("CalculateCosts",$TimerMin);
 		
 		
 		$vpos = 15;	
@@ -362,6 +362,7 @@ if (!defined('vtBoolean')) {
 	public function QueryAWATTAR() {
 
 		$BasePrice = $this->ReadPropertyString("BasePrice");
+		$CostCalculatorInterval = $this->ReadPropertyInteger("CostCalculator");
 
 		$curl = curl_init('https://api-test.awattar.de/v1/optimizer');
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
@@ -398,9 +399,7 @@ if (!defined('vtBoolean')) {
 
 			//Calculate Consumption
 			$archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
-			$CostCalculatorInterval = $this->ReadPropertyInteger("CostCalculator");
 			$CostEnergykWh = GetValue($this->GetIDForIdent('CostEnergykWh'));
-
 			$Energy = $this->GetIDForIdent('energy'); //Variable where sold energy for ESY meter is stored
 
 
