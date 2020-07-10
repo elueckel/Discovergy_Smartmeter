@@ -96,6 +96,9 @@ if (!defined('vtBoolean')) {
 		
 		$TimerMS = $this->ReadPropertyInteger("Timer") * 1000;
 		$this->SetTimerInterval("GetMeterReading",$TimerMS);
+
+		$TimerMin = $this->ReadPropertyInteger("CostCalculator") * 1000 * 60;
+		$this->SetTimerInterval("CalculateCost",$TimerMin);
 		
 		
 		$vpos = 15;	
