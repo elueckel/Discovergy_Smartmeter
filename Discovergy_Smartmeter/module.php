@@ -362,7 +362,6 @@ if (!defined('vtBoolean')) {
 	public function QueryAWATTAR() {
 
 		$BasePrice = $this->ReadPropertyString("BasePrice");
-		$CostCalculatorInterval = $this->ReadPropertyInteger("CostCalculator");
 
 		$curl = curl_init('https://api-test.awattar.de/v1/optimizer');
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
@@ -394,7 +393,7 @@ if (!defined('vtBoolean')) {
 	public function CalculateCosts() {
 		
 		$manufacturerId = GetValue($this->GetIDForIdent('manufacturerId'));
-		$CostCalculatorInterval = GetValue($this->GetIDForIdent('CostCalculatorInterval'));
+		$CostCalculatorInterval = $this->ReadPropertyInteger("CostCalculator");
 
 		if ($manufacturerId == "ESY") {
 
