@@ -30,7 +30,7 @@ if (!defined('vtBoolean')) {
 			$this->RegisterPropertyBoolean("ConsumptionMainaWATTar", 0);
 			$this->RegisterPropertyBoolean("ConsumptionSecondary", 0);
 			$this->RegisterPropertyBoolean("Sale", 0);
-			$this->RegisterPropertyString("BasePrice","0.1971");
+			$this->RegisterPropertyString("BasePrice","0.1996");
 			//$this->RegisterPropertyString("SellPrice","0.16");
 			$this->RegisterPropertyBoolean("EarningsCalculation",0);
 
@@ -162,7 +162,7 @@ if (!defined('vtBoolean')) {
 					if ($manufacturerId == "ESY") {
 						$this->RegisterVariableFloat("energy", $this->Translate('Energy Bought'), "DSM.WattK");
 						$this->RegisterVariableFloat("energyout", $this->Translate('Energy Sold'), "DSM.WattK");
-						$this->RegisterVariableFloat("power", $this->Translate('Current Power'), "DSM.WattK");
+						$this->RegisterVariableFloat("power", $this->Translate('Current Power'), "~Watt.14490");
 						$this->RegisterVariableFloat("phase1", $this->Translate('Phase 1'), "DSM.WattK");
 						$this->RegisterVariableFloat("phase2", $this->Translate('Phase 2'), "DSM.WattK");
 						$this->RegisterVariableFloat("phase3", $this->Translate('Phase 3'), "DSM.WattK");
@@ -379,7 +379,7 @@ if (!defined('vtBoolean')) {
 		$CurrentPriceMWh = $data->data->current->price;
 		$CurrentPrice = $CurrentPriceMWh / 1000;
 		$this->SendDebug($this->Translate('aWATTar'),$this->Translate('Current cost per kWh: ').$CurrentPrice,0);
-		$CostEnergykWh = $BasePrice + ($CurrentPrice * 1.19);
+		$CostEnergykWh = $BasePrice + ($CurrentPrice * 1.16);
 
 		SetValue($this->GetIDForIdent('CostEnergykWh'), $CostEnergykWh);
 
