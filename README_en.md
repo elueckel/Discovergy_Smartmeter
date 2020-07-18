@@ -1,10 +1,10 @@
 # Discovergy Smartmeter
 This modules allows to download data from smartmeters connected to the the Discovergy Portal/System (incl. support for OEM versions like ComMetering).
 
-## Konfiguration 1.01
-To use the modul an account with Discovergy (or OEM like ComMetering) is required next to a smartmeter connected to their portal. Based on the login information all conntected meters will be added and readings will be made available as outlined below in the version information.
-To analyze the downloaded data, it is required to turn on the archiving function within the created variables (Count for Consumption - others can be Standard as the aggregetation type). 
-The interval determins how often data should be downloaded from the Discovergy Portal.
+## Konfiguration 2.0
+1. Install the module 
+2. Add the Instance for Discovergy (there are also other ones named by the OEM names like aWATTar, ComMetering etc.)
+3. Add the 
 
 ## Version 1.0 (14.06.2020)
 * Query Energy Smartmeters from vendors like EMH and ESY
