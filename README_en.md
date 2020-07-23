@@ -37,7 +37,7 @@ In general different meters provide different data points. Please also check the
 ## Version 2.0 (10.07.2020)
 * Complete re-write using one instance per meter
 * Manuell setup via meter UID (provided by component)
-* Calculation of cost and earnings (PV)
+* Calculation of cost and earnings (PV) - WARNING ... if enabled variables for consumption and earnings will be automatically archived.
 * Integration of aWATTar smart tarifs
 
 
