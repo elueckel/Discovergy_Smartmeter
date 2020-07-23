@@ -16,7 +16,8 @@
 			"caption": "Energy Cost/Earnings Calculations",
 			"items": [
 				{ "type": "Label", "label": "***** IMPORTANT ******"},
-				{ "type": "Label", "label": "1. Archiving needs to be enabled for the variables"},
+				{ "type": "Label", "label": "1. !!! COST CALCULATION TURNS ON DATA ARCHIVING"},
+				{ "type": "Label", "label": "(affected variables Consumed/Sold Engery/Gas (kWh/m3) and corresponding cost/earnings (€)"},
 				{ "type": "Label", "label": "2. Cost & earnings per kWh can be set in the object tree"},
 				{ "type": "NumberSpinner", "name": "CostCalculator", "caption": "Cost Calculation", "suffix": "minutes", "minimum": 0},
 				{ "type": "Label", "label": "Main Energy (HT)" },

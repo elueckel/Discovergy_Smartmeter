@@ -100,6 +100,7 @@ if (!defined('vtBoolean')) {
 		$TimerMin = $this->ReadPropertyInteger("CostCalculator") * 1000 * 60;
 		$this->SetTimerInterval("CalculateCosts",$TimerMin);
 		
+		$archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
 		
 		$vpos = 15;	
 		
@@ -172,10 +173,24 @@ if (!defined('vtBoolean')) {
 						if ($ConsumptionMain == true) {
 							$this->RegisterVariableFloat("CostEnergykWh", $this->Translate('Cost per kwH'), "~Euro");
 							$this->RegisterVariableFloat("CalculatedCost", $this->Translate('Calculated Cost HT'), "~Euro");
+							$energyID = $this->GetIDForIdent('energy');
+							$CalculatedCostID = $this->GetIDForIdent('CalculatedCost');
+							AC_SetLoggingStatus($archiveID, $energyID, true);
+							AC_SetAggregationType($archiveID, $energyID, 1);
+							AC_SetLoggingStatus($archiveID, $CalculatedCostID, true);
+							AC_SetAggregationType($archiveID, $CalculatedCostID, 1);
+							IPS_ApplyChanges($archiveID);
 						}
 						if ($EarningsCalculation == true) {
 							$this->RegisterVariableFloat("CompensationEnergykWh", $this->Translate('Compensation per kWh'), "~Euro");
 							$this->RegisterVariableFloat("CalculatedEarnings", $this->Translate('Calculated Earnings'), "~Euro");
+							$energyoutID = $this->GetIDForIdent('energyout');
+							$CalculatedEarningsID = $this->GetIDForIdent('CalculatedEarnings');
+							AC_SetLoggingStatus($archiveID, $energyoutID, true);
+							AC_SetAggregationType($archiveID, $energyoutID, 1);
+							AC_SetLoggingStatus($archiveID, $CalculatedEarningsID, true);
+							AC_SetAggregationType($archiveID, $CalculatedEarningsID, 1);
+							IPS_ApplyChanges($archiveID);
 						}			
 					}
 			
@@ -189,14 +204,35 @@ if (!defined('vtBoolean')) {
 						if ($ConsumptionMain == true) {
 							$this->RegisterVariableFloat("CostEnergykWh", $this->Translate('Cost per kWh HT'), "~Euro");
 							$this->RegisterVariableFloat("CalculatedCost", $this->Translate('Calculated Cost HT'), "~Euro");
+							$effective_power_mainID = $this->GetIDForIdent('effective_power_main');
+							$CalculatedCostID = $this->GetIDForIdent('CalculatedCost');
+							AC_SetLoggingStatus($archiveID, $effective_power_mainID, true);
+							AC_SetAggregationType($archiveID, $effective_power_mainID, 1);
+							AC_SetLoggingStatus($archiveID, $CalculatedCostID, true);
+							AC_SetAggregationType($archiveID, $CalculatedCostID, 1);
+							IPS_ApplyChanges($archiveID);
 						}
 						if ($ConsumptionSecondary == true) {
 							$this->RegisterVariableFloat("CostEnergykWhSecondary", $this->Translate('Cost per kWh NT'), "~Euro");
 							$this->RegisterVariableFloat("CalculatedCostSecondary", $this->Translate('Calculated Cost NT'), "~Euro");
+							$effective_power_secondaryID = $this->GetIDForIdent('effective_power_secondary');
+							$CalculatedCostSecondaryID = $this->GetIDForIdent('CalculatedCostSecondary');
+							AC_SetLoggingStatus($archiveID, $effective_power_secondaryID, true);
+							AC_SetAggregationType($archiveID, $effective_power_secondaryID, 1);
+							AC_SetLoggingStatus($archiveID, $CalculatedCostSecondaryID, true);
+							AC_SetAggregationType($archiveID, $CalculatedCostSecondaryID, 1);
+							IPS_ApplyChanges($archiveID);
 						}
 						if ($EarningsCalculation == true) {
 							$this->RegisterVariableFloat("CompensationEnergykWh", $this->Translate('Compensation per kwH'), "~Euro");
 							$this->RegisterVariableFloat("CalculatedEarnings", $this->Translate('Calculated Earnings'), "~Euro");
+							$sold_power_mainID = $this->GetIDForIdent('sold_power_main');
+							$CalculatedEarningsID = $this->GetIDForIdent('CalculatedEarnings');
+							AC_SetLoggingStatus($archiveID, $sold_power_mainID, true);
+							AC_SetAggregationType($archiveID, $sold_power_mainID, 1);
+							AC_SetLoggingStatus($archiveID, $CalculatedEarningsID, true);
+							AC_SetAggregationType($archiveID, $CalculatedEarningsID, 1);
+							IPS_ApplyChanges($archiveID);
 						}					
 					}	
 
@@ -205,6 +241,13 @@ if (!defined('vtBoolean')) {
 						if ($ConsumptionGas == true) {
 							$this->RegisterVariableFloat("CostEnergym3", $this->Translate('Cost per m3'), "~Euro");
 							$this->RegisterVariableFloat("CalculatedCost", $this->Translate('Calculated Cost Gas'), "~Euro");
+							$gas_usageID = $this->GetIDForIdent('gas_usageID');
+							$CalculatedCostID = $this->GetIDForIdent('CalculatedCost');
+							AC_SetLoggingStatus($archiveID, $gas_usageID, true);
+							AC_SetAggregationType($archiveID, $gas_usageID, 1);
+							AC_SetLoggingStatus($archiveID, $CalculatedCostID, true);
+							AC_SetAggregationType($archiveID, $CalculatedCostID, 1);
+							IPS_ApplyChanges($archiveID);
 						}
 					}
 				}
