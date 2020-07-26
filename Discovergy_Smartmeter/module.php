@@ -503,7 +503,7 @@ if (!defined('vtBoolean')) {
 			}
 
 
-			if ($manufacturerId == "EMH") {
+			else if ($manufacturerId == "EMH") {
 
 				//Calculate Consumption
 				$archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
@@ -605,7 +605,7 @@ if (!defined('vtBoolean')) {
 				}
 			}
 
-			if ($manufacturerId == "ELS") {
+			else if ($manufacturerId == "ELS") {
 
 				//Calculate Consumption
 				$archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
