@@ -501,18 +501,54 @@ if (!defined('vtBoolean')) {
 					$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Current earning per kWh: ').round($CompensationEnergykWh, 3)." €".$this->Translate(' / Calculated Earnings: ').round($earnings, 3)." €",0);
 				}
 			}
+		}
+
+		else if ($manufacturerId == "EMH") {
+			//$this->SendDebug($this->Translate('Cost Calculation'),"EMH Schleife",0);
+
+			//Calculate Consumption
+			$archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
+			$CostCalculatorInterval = $this->ReadPropertyInteger("CostCalculator");
+			$CostEnergykWh = GetValue($this->GetIDForIdent('CostEnergykWh'));
+
+			$Energy = $this->GetIDForIdent('effective_power_main'); //Variable where sold energy for ESY meter is stored
 
 
-			else if ($manufacturerId == "EMH") {
+			$werte = AC_GetLoggedValues($archiveID, $Energy, strtotime("-".$CostCalculatorInterval." minutes"), time(), 0);
+			//var_dump($werte);
 
-				//Calculate Consumption
-				$archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
+			$letzter = array_pop($werte);
+			//echo $letzter["Value"];
+
+			$array_count = count($werte);
+			//$this->SendDebug($this->Translate('Cost Calculation'),"Array Count".$array_count,0);
+			if ($array_count > 0) {
+				$first = $werte["0"]["Value"];
+				//echo "echo ".$first;
+
+				$wert = array_pop($werte);
+				$last = $wert["Value"];
+				//echo " last ".$last;
+				$verbrauch = $first - $last;
+				//echo " verbrauch ".$verbrauch;
+				$kosten = $verbrauch * $CostEnergykWh;
+				//echo " kosten ".$kosten;
+				SetValue($this->GetIDForIdent('CalculatedCost'), $kosten);
+				$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Datapoints found: ').$array_count.$this->Translate(' / Power Consumed HT: ').round($verbrauch,3)." kWh",0);
+				$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Current cost per kWh HT: ').round($CostEnergykWh, 3)." €".$this->Translate(' / Calculated Cost: ').round($kosten, 3)." €",0);
+			}
+
+			// Caculate Feed-In Revenue 
+			
+			$ConsumptionSecondary = $this->ReadPropertyBoolean("ConsumptionSecondary");
+			
+			if ($ConsumptionSecondary == 1) {
 				$CostCalculatorInterval = $this->ReadPropertyInteger("CostCalculator");
-				$CostEnergykWh = GetValue($this->GetIDForIdent('CostEnergykWh'));
-	
-				$Energy = $this->GetIDForIdent('effective_power_main'); //Variable where sold energy for ESY meter is stored
-	
-	
+				$CostEnergykWh = GetValue($this->GetIDForIdent('CostEnergykWhSecondary'));
+
+				$Energy = $this->GetIDForIdent('effective_power_secondary'); //Variable where sold energy for ESY meter is stored
+
+
 				$werte = AC_GetLoggedValues($archiveID, $Energy, strtotime("-".$CostCalculatorInterval." minutes"), time(), 0);
 				//var_dump($werte);
 	
@@ -532,113 +568,76 @@ if (!defined('vtBoolean')) {
 					//echo " verbrauch ".$verbrauch;
 					$kosten = $verbrauch * $CostEnergykWh;
 					//echo " kosten ".$kosten;
-					SetValue($this->GetIDForIdent('CalculatedCost'), $kosten);
-					$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Datapoints found: ').$array_count.$this->Translate(' / Power Consumed HT: ').round($verbrauch,3)." kWh",0);
-					$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Current cost per kWh HT: ').round($CostEnergykWh, 3)." €".$this->Translate(' / Calculated Cost: ').round($kosten, 3)." €",0);
-				}
-	
-				// Caculate Feed-In Revenue 
-				
-				$ConsumptionSecondary = $this->ReadPropertyBoolean("ConsumptionSecondary");
-	
-				if ($EarningsCalculation == 1) {
-					$CostCalculatorInterval = $this->ReadPropertyInteger("CostCalculator");
-					$CostEnergykWh = GetValue($this->GetIDForIdent('CostEnergykWhSecondary'));
-	
-					$Energy = $this->GetIDForIdent('effective_power_secondary'); //Variable where sold energy for ESY meter is stored
-	
-	
-					$werte = AC_GetLoggedValues($archiveID, $Energy, strtotime("-".$CostCalculatorInterval." minutes"), time(), 0);
-					//var_dump($werte);
-		
-					$letzter = array_pop($werte);
-					//echo $letzter["Value"];
-		
-					$array_count = count($werte);
-		
-					if ($array_count > 0) {
-						$first = $werte["0"]["Value"];
-						//echo "echo ".$first;
-		
-						$wert = array_pop($werte);
-						$last = $wert["Value"];
-						//echo " last ".$last;
-						$verbrauch = $first - $last;
-						//echo " verbrauch ".$verbrauch;
-						$kosten = $verbrauch * $CostEnergykWh;
-						//echo " kosten ".$kosten;
-						SetValue($this->GetIDForIdent('CalculatedCostSecondary'), $kosten);
-						$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Datapoints found: ').$array_count.$this->Translate(' / Power Consumed NT: ').round($verbrauch,3)." kWh",0);
-						$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Current cost per kWh NT: ').round($CostEnergykWh, 3)." €".$this->Translate(' / Calculated Cost NT: ').round($kosten, 3)." €",0);
-					}
-				}
-
-
-				$EarningsCalculation = $this->ReadPropertyBoolean("EarningsCalculation");
-	
-				if ($EarningsCalculation == 1) {
-					$CompensationEnergykWh = GetValue($this->GetIDForIdent('CompensationEnergykWh'));
-					$energyout = $this->GetIDForIdent('sold_power_main');
-					$werte = AC_GetLoggedValues($archiveID, $energyout, strtotime("-".$CostCalculatorInterval." minutes"), time(), 0);
-					//var_dump($werte);
-	
-					$letzter = array_pop($werte);
-					//echo $letzter["Value"];
-	
-					$array_count = count($werte);
-	
-					if ($array_count > 0) {
-						$first = $werte["0"]["Value"];
-						//echo "echo ".$first;
-	
-						$wert = array_pop($werte);
-						$last = $wert["Value"];
-						//echo " last ".$last;
-						$production = $first - $last;
-						//echo " verbrauch ".$verbrauch;
-						$earnings = $production * $CompensationEnergykWh;
-						//echo " kosten ".$kosten;
-						SetValue($this->GetIDForIdent('CalculatedEarnings'), $earnings);
-						$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Datapoints found: ').$array_count.$this->Translate(' / Power Generated: ').round($production,3)." kWh",0);
-						$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Current earning per kWh: ').round($CompensationEnergykWh, 3)." €".$this->Translate(' / Calculated Earnings: ').round($earnings, 3)." €",0);
-					}
+					SetValue($this->GetIDForIdent('CalculatedCostSecondary'), $kosten);
+					$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Datapoints found: ').$array_count.$this->Translate(' / Power Consumed NT: ').round($verbrauch,3)." kWh",0);
+					$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Current cost per kWh NT: ').round($CostEnergykWh, 3)." €".$this->Translate(' / Calculated Cost NT: ').round($kosten, 3)." €",0);
 				}
 			}
 
-			else if ($manufacturerId == "ELS") {
 
-				//Calculate Consumption
-				$archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
-				$CostCalculatorInterval = $this->ReadPropertyInteger("CostCalculator");
-				$CostEnergym3 = GetValue($this->GetIDForIdent('CostEnergym3'));
-	
-				$Energy = $this->GetIDForIdent('gas_usage'); //Variable where sold energy for ESY meter is stored
+			$EarningsCalculation = $this->ReadPropertyBoolean("EarningsCalculation");
 
-				$werte = AC_GetLoggedValues($archiveID, $Energy, strtotime("-".$CostCalculatorInterval." minutes"), time(), 0);
+			if ($EarningsCalculation == 1) {
+				$CompensationEnergykWh = GetValue($this->GetIDForIdent('CompensationEnergykWh'));
+				$energyout = $this->GetIDForIdent('sold_power_main');
+				$werte = AC_GetLoggedValues($archiveID, $energyout, strtotime("-".$CostCalculatorInterval." minutes"), time(), 0);
 				//var_dump($werte);
-	
+
 				$letzter = array_pop($werte);
 				//echo $letzter["Value"];
-	
+
 				$array_count = count($werte);
-	
+
 				if ($array_count > 0) {
 					$first = $werte["0"]["Value"];
 					//echo "echo ".$first;
-	
+
 					$wert = array_pop($werte);
 					$last = $wert["Value"];
 					//echo " last ".$last;
-					$verbrauch = $first - $last;
+					$production = $first - $last;
 					//echo " verbrauch ".$verbrauch;
-					$kosten = $verbrauch * $CostEnergym3;
+					$earnings = $production * $CompensationEnergykWh;
 					//echo " kosten ".$kosten;
-					SetValue($this->GetIDForIdent('CalculatedCost'), $kosten);
-					$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Datapoints found: ').$array_count.$this->Translate(' / Gas Consumed: ').round($verbrauch,3)." kWh",0);
-					$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Current cost per m3: ').round($CostEnergym3, 3)." €".$this->Translate(' / Calculated Cost: ').round($kosten, 3)." €",0);
+					SetValue($this->GetIDForIdent('CalculatedEarnings'), $earnings);
+					$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Datapoints found: ').$array_count.$this->Translate(' / Power Generated: ').round($production,3)." kWh",0);
+					$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Current earning per kWh: ').round($CompensationEnergykWh, 3)." €".$this->Translate(' / Calculated Earnings: ').round($earnings, 3)." €",0);
 				}
 			}
+		}
 
+		else if ($manufacturerId == "ELS") {
+
+			//Calculate Consumption
+			$archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
+			$CostCalculatorInterval = $this->ReadPropertyInteger("CostCalculator");
+			$CostEnergym3 = GetValue($this->GetIDForIdent('CostEnergym3'));
+
+			$Energy = $this->GetIDForIdent('gas_usage'); //Variable where sold energy for ESY meter is stored
+
+			$werte = AC_GetLoggedValues($archiveID, $Energy, strtotime("-".$CostCalculatorInterval." minutes"), time(), 0);
+			//var_dump($werte);
+
+			$letzter = array_pop($werte);
+			//echo $letzter["Value"];
+
+			$array_count = count($werte);
+
+			if ($array_count > 0) {
+				$first = $werte["0"]["Value"];
+				//echo "echo ".$first;
+
+				$wert = array_pop($werte);
+				$last = $wert["Value"];
+				//echo " last ".$last;
+				$verbrauch = $first - $last;
+				//echo " verbrauch ".$verbrauch;
+				$kosten = $verbrauch * $CostEnergym3;
+				//echo " kosten ".$kosten;
+				SetValue($this->GetIDForIdent('CalculatedCost'), $kosten);
+				$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Datapoints found: ').$array_count.$this->Translate(' / Gas Consumed: ').round($verbrauch,3)." kWh",0);
+				$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Current cost per m3: ').round($CostEnergym3, 3)." €".$this->Translate(' / Calculated Cost: ').round($kosten, 3)." €",0);
+			}
 		}
 
 	}
