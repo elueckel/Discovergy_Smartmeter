@@ -359,7 +359,7 @@ if (!defined('vtBoolean')) {
 				$effective_power_complete_raw = $data->values->{'1.8.0'};
 				$effective_power_complete = $effective_power_complete_raw / 1000000;
 				SetValue($this->GetIDForIdent('effective_power_complete'), $effective_power_complete);
-				$this->SendDebug($this->Translate('EMH Meter'),$this->Trans late('Effective Power Complete: ').round($effective_power_complete,3)." kWh",0);
+				$this->SendDebug($this->Translate('EMH Meter'),$this->Translate('Effective Power Complete: ').round($effective_power_complete,3)." kWh",0);
 
 				$effective_power_main_raw = $data->values->{'1.8.1'};
 				$effective_power_main = $effective_power_main_raw / 1000000;
