@@ -303,103 +303,108 @@ if (!defined('vtBoolean')) {
 
 		$data = json_decode($json);
 
-		if ($manufacturerId == "ESY") {
-			$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('*********************************************************************'),0);
-			$energy_raw = $data->values->energy;
-			$energy = $energy_raw / 10000000000;
-			SetValue($this->GetIDForIdent('energy'), $energy);
-			$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Energy Consumed: ').round($energy,3)." kWh",0);
-
-			$energyout_raw = $data->values->energyOut;
-			$energyout = $energyout_raw / 10000000000;
-			SetValue($this->GetIDForIdent('energyout'), $energyout);
-			$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Energy Sold: ').round($energyout,3)." kWh",0);
-
-			$power_raw = $data->values->power;
-			$power = $power_raw / 1000;
-			SetValue($this->GetIDForIdent('power'), $power);
-			$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Current Consumption: ').round($power,3)." kW",0);
-
-			$phase1_raw = $data->values->power1;
-			$phase1 = $phase1_raw / 1000;
-			SetValue($this->GetIDForIdent('phase1'), $phase1);
-			$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 1 Consumption: ').round($phase1,3)." kWh",0);
-
-			$phase2_raw = $data->values->power2;
-			$phase2 = $phase2_raw / 1000;
-			SetValue($this->GetIDForIdent('phase2'), $phase2);
-			$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 2 Consumption: ').round($phase2,3)." kWh",0);
-
-			$phase3_raw = $data->values->power3;
-			$phase3 = $phase3_raw / 1000;
-			SetValue($this->GetIDForIdent('phase3'), $phase3);
-			$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 3 Consumption: ').round($phase3,3)." kWh",0);
-
-			$voltage1_raw = $data->values->voltage1;
-			$voltage1 = $voltage1_raw / 1000;
-			SetValue($this->GetIDForIdent('voltage1'), $voltage1);
-			$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 1 Voltage: ').round($voltage1,3)." V",0);
-
-			$voltage2_raw = $data->values->voltage2;
-			$voltage2 = $voltage2_raw / 1000;
-			SetValue($this->GetIDForIdent('voltage2'), $voltage2);
-			$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 2 Voltage: ').round($voltage2,3)." V",0);
-
-			$voltage3_raw = $data->values->voltage3;
-			$voltage3 = $voltage3_raw / 1000;
-			SetValue($this->GetIDForIdent('voltage3'), $voltage3);
-			$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 3 Voltage: ').round($voltage3,3)." V",0);
+		if ($data != NULL) {
 			
-		}
+			if ($manufacturerId == "ESY") {
+				$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('*********************************************************************'),0);
+				$energy_raw = $data->values->energy;
+				$energy = $energy_raw / 10000000000;
+				SetValue($this->GetIDForIdent('energy'), $energy);
+				$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Energy Consumed: ').round($energy,3)." kWh",0);
 
-		else if ($manufacturerId == "EMH") {
-			$this->SendDebug($this->Translate('EMH Meter'),$this->Translate('*********************************************************************'),0);
-			$effective_power_complete_raw = $data->values->{'1.8.0'};
-			$effective_power_complete = $effective_power_complete_raw / 1000000;
-			SetValue($this->GetIDForIdent('effective_power_complete'), $effective_power_complete);
-			$this->SendDebug($this->Translate('EMH Meter'),$this->Translate('Effective Power Complete: ').round($effective_power_complete,3)." kWh",0);
+				$energyout_raw = $data->values->energyOut;
+				$energyout = $energyout_raw / 10000000000;
+				SetValue($this->GetIDForIdent('energyout'), $energyout);
+				$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Energy Sold: ').round($energyout,3)." kWh",0);
 
-			$effective_power_main_raw = $data->values->{'1.8.1'};
-			$effective_power_main = $effective_power_main_raw / 1000000;
-			SetValue($this->GetIDForIdent('effective_power_main'), $effective_power_main);
-			$this->SendDebug($this->Translate('EMH Meter'),$this->Translate('Effective Power Complete HT: ').round($effective_power_main,3)." kWh",0);
+				$power_raw = $data->values->power;
+				$power = $power_raw / 1000;
+				SetValue($this->GetIDForIdent('power'), $power);
+				$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Current Consumption: ').round($power,3)." kW",0);
 
-			$effective_power_secondary_raw = $data->values->{'1.8.2'};
-			$effective_power_secondary = $effective_power_secondary_raw / 1000000;
-			SetValue($this->GetIDForIdent('effective_power_secondary'), $effective_power_secondary);
-			$this->SendDebug($this->Translate('EMH Meter'),$this->Translate('Effective Power Complete NT: ').round($effective_power_secondary,3)." kWh",0);
+				$phase1_raw = $data->values->power1;
+				$phase1 = $phase1_raw / 1000;
+				SetValue($this->GetIDForIdent('phase1'), $phase1);
+				$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 1 Consumption: ').round($phase1,3)." kWh",0);
 
-			$sold_power_complete_raw = $data->values->{'2.8.0'};
-			$sold_power_complete = $sold_power_complete_raw / 1000000;
-			SetValue($this->GetIDForIdent('sold_power_complete'), $sold_power_complete);
-			$this->SendDebug($this->Translate('EMH Meter'),$this->Translate('Sold Power Complete: ').round($sold_power_complete,3)." kWh",0);
+				$phase2_raw = $data->values->power2;
+				$phase2 = $phase2_raw / 1000;
+				SetValue($this->GetIDForIdent('phase2'), $phase2);
+				$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 2 Consumption: ').round($phase2,3)." kWh",0);
 
-			$sold_power_main_raw = $data->values->{'2.8.1'};
-			$sold_power_main = $sold_power_main_raw / 1000000;
-			SetValue($this->GetIDForIdent('sold_power_main'), $sold_power_main);
-			$this->SendDebug($this->Translate('EMH Meter'),$this->Translate('Sold Power Complete HT: ').round($sold_power_main,3)." kWh",0);
+				$phase3_raw = $data->values->power3;
+				$phase3 = $phase3_raw / 1000;
+				SetValue($this->GetIDForIdent('phase3'), $phase3);
+				$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 3 Consumption: ').round($phase3,3)." kWh",0);
 
-			$sold_power_secondary_raw = $data->values->{'2.8.2'};
-			$sold_power_secondary = $sold_power_secondary_raw / 1000000;
-			SetValue($this->GetIDForIdent('sold_power_secondary'), $sold_power_secondary);
-			$this->SendDebug($this->Translate('EMH Meter'),$this->Translate('Sold Power Complete NT: ').round($sold_power_secondary,3)." kWh",0);
-			/*
-			$current_power_raw = $data->values->{'1.25'};
-			$current_power = $current_power_raw / 1000;
-			SetValue($this->GetIDForIdent('current_power'), $current_power);
-			*/
-		}
-		
-		else if ($manufacturerId == "ELS") {
-			
-			$gas_raw = $data->values->volume;
-			$gas_usage = $gas_raw / 1000;
-			SetValue($this->GetIDForIdent('gas_usage'), $gas_usage);
-			$this->SendDebug($this->Translate('GAS Meter'),$this->Translate('*********************************************************************'),0);
-			$this->SendDebug($this->Translate('GAS Meter'),$this->Translate('Gas Consumed: ').round($gas_usage,3)." m3",0);
+				$voltage1_raw = $data->values->voltage1;
+				$voltage1 = $voltage1_raw / 1000;
+				SetValue($this->GetIDForIdent('voltage1'), $voltage1);
+				$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 1 Voltage: ').round($voltage1,3)." V",0);
+
+				$voltage2_raw = $data->values->voltage2;
+				$voltage2 = $voltage2_raw / 1000;
+				SetValue($this->GetIDForIdent('voltage2'), $voltage2);
+				$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 2 Voltage: ').round($voltage2,3)." V",0);
+
+				$voltage3_raw = $data->values->voltage3;
+				$voltage3 = $voltage3_raw / 1000;
+				SetValue($this->GetIDForIdent('voltage3'), $voltage3);
+				$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 3 Voltage: ').round($voltage3,3)." V",0);
 				
+			}
+
+			else if ($manufacturerId == "EMH") {
+				$this->SendDebug($this->Translate('EMH Meter'),$this->Translate('*********************************************************************'),0);
+				$effective_power_complete_raw = $data->values->{'1.8.0'};
+				$effective_power_complete = $effective_power_complete_raw / 1000000;
+				SetValue($this->GetIDForIdent('effective_power_complete'), $effective_power_complete);
+				$this->SendDebug($this->Translate('EMH Meter'),$this->Trans late('Effective Power Complete: ').round($effective_power_complete,3)." kWh",0);
+
+				$effective_power_main_raw = $data->values->{'1.8.1'};
+				$effective_power_main = $effective_power_main_raw / 1000000;
+				SetValue($this->GetIDForIdent('effective_power_main'), $effective_power_main);
+				$this->SendDebug($this->Translate('EMH Meter'),$this->Translate('Effective Power Complete HT: ').round($effective_power_main,3)." kWh",0);
+
+				$effective_power_secondary_raw = $data->values->{'1.8.2'};
+				$effective_power_secondary = $effective_power_secondary_raw / 1000000;
+				SetValue($this->GetIDForIdent('effective_power_secondary'), $effective_power_secondary);
+				$this->SendDebug($this->Translate('EMH Meter'),$this->Translate('Effective Power Complete NT: ').round($effective_power_secondary,3)." kWh",0);
+
+				$sold_power_complete_raw = $data->values->{'2.8.0'};
+				$sold_power_complete = $sold_power_complete_raw / 1000000;
+				SetValue($this->GetIDForIdent('sold_power_complete'), $sold_power_complete);
+				$this->SendDebug($this->Translate('EMH Meter'),$this->Translate('Sold Power Complete: ').round($sold_power_complete,3)." kWh",0);
+
+				$sold_power_main_raw = $data->values->{'2.8.1'};
+				$sold_power_main = $sold_power_main_raw / 1000000;
+				SetValue($this->GetIDForIdent('sold_power_main'), $sold_power_main);
+				$this->SendDebug($this->Translate('EMH Meter'),$this->Translate('Sold Power Complete HT: ').round($sold_power_main,3)." kWh",0);
+
+				$sold_power_secondary_raw = $data->values->{'2.8.2'};
+				$sold_power_secondary = $sold_power_secondary_raw / 1000000;
+				SetValue($this->GetIDForIdent('sold_power_secondary'), $sold_power_secondary);
+				$this->SendDebug($this->Translate('EMH Meter'),$this->Translate('Sold Power Complete NT: ').round($sold_power_secondary,3)." kWh",0);
+				/*
+				$current_power_raw = $data->values->{'1.25'};
+				$current_power = $current_power_raw / 1000;
+				SetValue($this->GetIDForIdent('current_power'), $current_power);
+				*/
+			}
+			
+			else if ($manufacturerId == "ELS") {
+				
+				$gas_raw = $data->values->volume;
+				$gas_usage = $gas_raw / 1000;
+				SetValue($this->GetIDForIdent('gas_usage'), $gas_usage);
+				$this->SendDebug($this->Translate('GAS Meter'),$this->Translate('*********************************************************************'),0);
+				$this->SendDebug($this->Translate('GAS Meter'),$this->Translate('Gas Consumed: ').round($gas_usage,3)." m3",0);
+					
+			}
 		}
-		
+		else {
+			// no data found;
+		}
 	}
 
 	public function QueryAWATTAR() {
