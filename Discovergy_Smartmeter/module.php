@@ -517,6 +517,7 @@ if (!defined('vtBoolean')) {
 			$CostEnergykWh = GetValue($this->GetIDForIdent('CostEnergykWh'));
 
 			$Energy = $this->GetIDForIdent('effective_power_main'); //Variable where sold energy for ESY meter is stored
+			$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Current cost per kWh HT: ').round($CostEnergykWh, 3),0);
 
 
 			$werte = AC_GetLoggedValues($archiveID, $Energy, strtotime("-".$CostCalculatorInterval." minutes"), time(), 0);
@@ -553,6 +554,7 @@ if (!defined('vtBoolean')) {
 				$CostEnergykWhSecondary = GetValue($this->GetIDForIdent('CostEnergykWhSecondary'));
 
 				$Energy = $this->GetIDForIdent('effective_power_secondary'); //Variable where sold energy for ESY meter is stored
+				$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Current cost per kWh NT: ').round($CostEnergykWhSecondary, 3),0);
 
 
 				$werte = AC_GetLoggedValues($archiveID, $Energy, strtotime("-".$CostCalculatorInterval." minutes"), time(), 0);
