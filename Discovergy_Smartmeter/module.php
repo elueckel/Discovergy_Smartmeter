@@ -539,6 +539,7 @@ if (!defined('vtBoolean')) {
 				$kosten = $verbrauch * $CostEnergykWh;
 				//echo " kosten ".$kosten;
 				SetValue($this->GetIDForIdent('CalculatedCost'), $kosten);
+				$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Current cost per kWh HT: ').round($CostEnergykWh, 3),0};
 				$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Datapoints found: ').$array_count.$this->Translate(' / Power Consumed HT: ').round($verbrauch,3)." kWh",0);
 				$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Current cost per kWh HT: ').round($CostEnergykWh, 3)." €".$this->Translate(' / Calculated Cost: ').round($kosten, 3)." €",0);
 			}
@@ -549,7 +550,7 @@ if (!defined('vtBoolean')) {
 			
 			if ($ConsumptionSecondary == 1) {
 				$CostCalculatorInterval = $this->ReadPropertyInteger("CostCalculator");
-				$CostEnergykWh = GetValue($this->GetIDForIdent('CostEnergykWhSecondary'));
+				$CostEnergykWhSecondary = GetValue($this->GetIDForIdent('CostEnergykWhSecondary'));
 
 				$Energy = $this->GetIDForIdent('effective_power_secondary'); //Variable where sold energy for ESY meter is stored
 
@@ -571,11 +572,12 @@ if (!defined('vtBoolean')) {
 					//echo " last ".$last;
 					$verbrauch = $first - $last;
 					//echo " verbrauch ".$verbrauch;
-					$kosten = $verbrauch * $CostEnergykWh;
+					$kosten = $verbrauch * $CostEnergykWhSecondary;
 					//echo " kosten ".$kosten;
 					SetValue($this->GetIDForIdent('CalculatedCostSecondary'), $kosten);
+					$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Current cost per kWh NT: ').round($CostEnergykWhSecondary, 3),0);
 					$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Datapoints found: ').$array_count.$this->Translate(' / Power Consumed NT: ').round($verbrauch,3)." kWh",0);
-					$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Current cost per kWh NT: ').round($CostEnergykWh, 3)." €".$this->Translate(' / Calculated Cost NT: ').round($kosten, 3)." €",0);
+					$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Current cost per kWh NT: ').round($CostEnergykWhSecondary, 3)." €".$this->Translate(' / Calculated Cost NT: ').round($kosten, 3)." €",0);
 				}
 			}
 
