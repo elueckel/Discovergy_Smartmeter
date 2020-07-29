@@ -544,6 +544,9 @@ if (!defined('vtBoolean')) {
 				$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Datapoints found: ').$array_count.$this->Translate(' / Power Consumed HT: ').round($verbrauch,3)." kWh",0);
 				$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Current cost per kWh HT: ').round($CostEnergykWh, 3)." €".$this->Translate(' / Calculated Cost: ').round($kosten, 3)." €",0);
 			}
+			else {
+				SetValue($this->GetIDForIdent('CalculatedCost'), 0);
+			}
 
 			// Caculate Feed-In Revenue 
 			
@@ -580,6 +583,9 @@ if (!defined('vtBoolean')) {
 					$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Current cost per kWh NT: ').round($CostEnergykWhSecondary, 3),0);
 					$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Datapoints found: ').$array_count.$this->Translate(' / Power Consumed NT: ').round($verbrauch,3)." kWh",0);
 					$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Current cost per kWh NT: ').round($CostEnergykWhSecondary, 3)." €".$this->Translate(' / Calculated Cost NT: ').round($kosten, 3)." €",0);
+				}
+				else {
+					SetValue($this->GetIDForIdent('CalculatedCostSecondary'), 0);
 				}
 			}
 
