@@ -539,7 +539,7 @@ if (!defined('vtBoolean')) {
 				$kosten = $verbrauch * $CostEnergykWh;
 				//echo " kosten ".$kosten;
 				SetValue($this->GetIDForIdent('CalculatedCost'), $kosten);
-				$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Current cost per kWh HT: ').round($CostEnergykWh, 3),0};
+				$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Current cost per kWh HT: ').round($CostEnergykWh, 3),0);
 				$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Datapoints found: ').$array_count.$this->Translate(' / Power Consumed HT: ').round($verbrauch,3)." kWh",0);
 				$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Current cost per kWh HT: ').round($CostEnergykWh, 3)." €".$this->Translate(' / Calculated Cost: ').round($kosten, 3)." €",0);
 			}
