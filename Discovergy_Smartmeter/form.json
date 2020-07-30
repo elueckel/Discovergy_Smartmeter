@@ -4,12 +4,55 @@
     [
     { "type": "Label", "label": "Meter Portal Login Settings" },
 		{ "type": "ValidationTextBox", "name": "UserName", "caption": "User Name" },
-		{ "type": "PasswordTextBox", "name": "Password", "caption": "Password" },	
+		{ "type": "PasswordTextBox", "name": "Password", "caption": "Password" },
+		{ "type": "Label", "label": "To add a Smartmeter" },
+		{ "type": "Label", "label": "1. Click Get Smartmeters for setup" },
+		{ "type": "Label", "label": "2. Copy the UID of the meter into the field below and safe the form" },
+		{ "type": "ValidationTextBox", "name": "SmartmeterUID", "caption": "Smartmeter UID" },		
 		{ "type": "Label", "label": "Update Timer (0 = off)" },
-		{ "type": "NumberSpinner", "name": "Timer", "caption": "Request Timer", "suffix": "seconds", "minimum": 0}
+		{ "type": "NumberSpinner", "name": "Timer", "caption": "Request Timer", "suffix": "seconds", "minimum": 0},
+		{
+			"type": "ExpansionPanel",
+			"caption": "Energy Cost/Earnings Calculations",
+			"items": [
+				{ "type": "Label", "label": "***** IMPORTANT ******"},
+				{ "type": "Label", "label": "1. !!! COST CALCULATION TURNS ON DATA ARCHIVING"},
+				{ "type": "Label", "label": "(affected variables Consumed/Sold Engery/Gas (kWh/m3) and corresponding cost/earnings (€)"},
+				{ "type": "Label", "label": "2. Cost & earnings per kWh can be set in the object tree"},
+				{ "type": "NumberSpinner", "name": "CostCalculator", "caption": "Cost Calculation", "suffix": "minutes", "minimum": 0},
+				{ "type": "Label", "label": "Main Energy (HT)" },
+				{ "type": "RowLayout",
+					"items": [
+						{ "type": "CheckBox", "name": "ConsumptionMain", "caption": "Enabled" },
+						{ "type": "CheckBox", "name": "ConsumptionMainaWATTar", "caption": "Use aWATTar Tarif" },
+						{ "type": "ValidationTextBox", "name": "BasePrice", "caption": "aWATTar Base Price" }
+					]
+				},
+				{ "type": "Label", "label": "If aWATTar tarif is enabled, the cost will automatically be updated hourly"},
+				{ "type": "Label", "label": ""},
+				{ "type": "Label", "label": "Secondary Energy Cost (NT)" },
+				{ "type": "CheckBox", "name": "ConsumptionSecondary", "caption": "Enabled" },
+				{ "type": "Label", "label": "Consumption secondary only makes sense with multi-tarif readers with heat pumps (e.g. EMH Meter)" },
+				{ "type": "Label", "label": ""},
+				{ "type": "Label", "label": "Earnings (PV)" },
+				{ "type": "CheckBox", "name": "EarningsCalculation", "caption": "Enabled" }
+			]
+		},
+		{
+			"type": "ExpansionPanel",
+			"caption": "Gas: Cost Calculation",
+			"items": [
+				{ "type": "Label", "label": "1. Archiving needs to be enabled for the variables"},
+				{ "type": "Label", "label": "2. The price per m3 can be set in the object tree"},
+				{ "type": "CheckBox", "name": "ConsumptionGas", "caption": "Calculate Gas Cost" }
+			]
+		}		
     ],
 	  "actions":
 	  [
-		{ "type": "Button", "label": "Get Meter Reading", "onClick": "DSM_GetMeterReading($id);" }
+		{ "type": "Button", "label": "Get Meter Reading", "onClick": "DSM_GetMeterReading($id);" },
+		{ "type": "Button", "label": "Get aWATTar Data", "onClick": "DSM_QueryAWATTAR($id);" },
+		{ "type": "Button", "label": "Calculate Costs", "onClick": "DSM_CalculateCosts($id);" },
+		{ "type": "Button", "label": "Get Smartmeters for Setup", "onClick": "DSM_GetMeters($id);" }
   	]
 }
