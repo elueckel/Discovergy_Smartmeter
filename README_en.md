@@ -40,5 +40,4 @@ In general different meters provide different data points. Please also check the
 * Calculation of cost and earnings (PV) - WARNING ... if enabled variables for consumption and earnings will be automatically archived.
 * Integration of aWATTar smart tarifs
 
-
 For other unsupported meters, please post a message into the forum: https://www.symcon.de/forum/threads/43805-Modul-Discovergy-Smartmeter-die-zweite-f%C3%BCr-Module-Store?highlight=smartmeter
