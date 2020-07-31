@@ -42,7 +42,7 @@
 			"type": "ExpansionPanel",
 			"caption": "Gas: Cost Calculation",
 			"items": [
-				{ "type": "Label", "label": "1. Archiving needs to be enabled for the variables"},
+				{ "type": "Label", "label": "1. !!! COST CALCULATION TURNS ON DATA ARCHIVING"},
 				{ "type": "Label", "label": "2. The price per m3 can be set in the object tree"},
 				{ "type": "CheckBox", "name": "ConsumptionGas", "caption": "Calculate Gas Cost" }
 			]

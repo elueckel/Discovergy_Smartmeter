@@ -4,9 +4,10 @@
 			"Meter Portal Login Settings": "Zählerportal Login Daten", 
 			"User Name": "Anmeldename",
 			"Password": "Passwort",
+			"To add a Smartmeter": "Um einen Smartmeter hinzuzufügen",
 			"Request Timer": "Abrufinterval",
 			"seconds": "Sekunden",
-			"Update Timer (0 = off)": "Updateinterval (0 = aus)",
+			"Update Timer (0 = off)": "Aktualisierungsinterval (0 = aus)",
 			"Meter ": "Zähler",
 			"Serialnumber": "Seriennummer",
 			"To add a Smartmeter:": "Um ein Smartmeter hinzuzufügen:",
@@ -59,7 +60,10 @@
 			"Get aWATTar Data": "aWATTar Strompreis holen",
 			"Calculate Costs": "Kosten berechnen",
 			"Gas: Cost Calculation": "Gas: Kostenkalkulation",
-			"Energy": "Strom"
+			"Energy": "Strom",
+			"Calculate Gas Cost": "Kosten für Gasverbrauch berechnen",
+			"minutes": "Minuten",
+			"Cost Calculation": "Interval Kosten/Ertragsberechnung"
 		}
 	}
 }
