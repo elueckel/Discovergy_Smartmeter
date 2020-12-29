@@ -63,7 +63,9 @@
 			"Energy": "Strom",
 			"Calculate Gas Cost": "Kosten für Gasverbrauch berechnen",
 			"minutes": "Minuten",
-			"Cost Calculation": "Interval Kosten/Ertragsberechnung"
+			"Cost Calculation": "Interval Kosten/Ertragsberechnung",
+			"Turn On archiving for statistics variables": "Archivierung für Statistik Variablen aktivieren",
+			"WARNING Archiving consumes hard disk space. Do you want to activate?": "WARNUNG Datenarchivierung verbraucht Festplattenspeicher - Sind sie sicher?"
 		}
 	}
 }

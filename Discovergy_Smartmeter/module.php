@@ -23,22 +23,29 @@ if (!defined('vtBoolean')) {
 
 			$this->RegisterPropertyString("UserName","");
 			$this->RegisterPropertyString("Password","");
-			$this->RegisterPropertyInteger("Timer", 0);
+			$this->RegisterPropertyInteger("TimerQueryMeter", 0);
 			$this->RegisterPropertyBoolean("Debug", 0);
 
 			$this->RegisterPropertyBoolean("ConsumptionMain", 0);
-			$this->RegisterPropertyBoolean("ConsumptionMainaWATTar", 0);
+			$this->RegisterPropertyInteger("CostCalculationMethod",0);
+			$this->RegisterPropertyBoolean("aWATTarCalculateConsumptionMain", 0);
 			$this->RegisterPropertyBoolean("ConsumptionSecondary", 0);
 			$this->RegisterPropertyBoolean("Sale", 0);
 			$this->RegisterPropertyString("BasePrice","0.1996");
 			//$this->RegisterPropertyString("SellPrice","0.16");
 			$this->RegisterPropertyBoolean("EarningsCalculation",0);
 
+			$this->RegisterPropertyString("TibberAPIKey","");
+
+			//$this->RegisterPropertyBoolean("TibberCalculateConsumptionMain", 0);
+			//$this->RegisterPropertyBoolean("TibberCalculateConsumptionMain", 0);
+
+
 			$this->RegisterPropertyBoolean("ConsumptionGas", 0);
 			//$this->RegisterPropertyString("CostEnergym3", 0);
 			
 
-			$this->RegisterPropertyInteger("CostCalculator", 0);
+			$this->RegisterPropertyInteger("TimerCostCalculator", 0);
 
 			$this->RegisterPropertyString("SmartmeterUID","");
 
@@ -55,12 +62,23 @@ if (!defined('vtBoolean')) {
 				IPS_SetVariableProfileDigits("DSM.WattK", 2);
 				IPS_SetVariableProfileText("DSM.WattK", "", " kWh");
 			}
+
+			if (IPS_VariableProfileExists("DSM.CostCalculationMethod") == false){
+					IPS_CreateVariableProfile("DSM.CostCalculationMethod", 1);
+					IPS_SetVariableProfileIcon("DSM.Watt", "Euro");
+					IPS_SetVariableProfileAssociation("DSM.CostCalculationMethod", 0,  $this->Translate('No Cost Calculation'), "",-1);
+					IPS_SetVariableProfileAssociation("DSM.CostCalculationMethod", 1, $this->Translate('Manual - Configured in Object Tree'), "",-1);
+					IPS_SetVariableProfileAssociation("DSM.CostCalculationMethod", 2, $this->Translate('Automatic - aWATTar'), "",-1);
+					IPS_SetVariableProfileAssociation("DSM.CostCalculationMethod", 3, $this->Translate('Automatic - Tibber'), "",-1);
+			}
 			
 			//Component sets timer, but default is OFF
 			$this->RegisterTimer("GetMeterReading",0,"DSM_GetMeterReading(\$_IPS['TARGET']);");
-			$this->RegisterTimer("QueryAWATTAR",0,"DSM_QueryAWATTAR(\$_IPS['TARGET']);");
+			$this->RegisterTimer("Query Energy Cost Hourly",0,"DSM_QueryEnergyCostHourly(\$_IPS['TARGET']);");
+			//$this->RegisterTimer("QueryTibber",0,"DSM_QueryTibber(\$_IPS['TARGET']);");
 			$this->RegisterTimer("CalculateCosts",0,"DSM_CalculateCosts(\$_IPS['TARGET']);");
 
+			/*
 			$ConsumptionMainaWATTar = $this->ReadPropertyBoolean("ConsumptionMainaWATTar");
 			if ($ConsumptionMainaWATTar == 1) {
 				$this->QueryAWATTAR(); // get current data
@@ -82,6 +100,7 @@ if (!defined('vtBoolean')) {
 			else if ($ConsumptionMainaWATTar == 0) {
 				$this->SetTimerInterval("QueryAWATTAR",0);
 			}
+			*/
 					
 		}
 	
@@ -90,14 +109,13 @@ if (!defined('vtBoolean')) {
 			
 		//Never delete this line!
 		parent::ApplyChanges();
-		
 								
 		//Timers Update - if greater than 0 = On
 		
-		$TimerMS = $this->ReadPropertyInteger("Timer") * 1000;
+		$TimerMS = $this->ReadPropertyInteger("TimerQueryMeter") * 1000;
 		$this->SetTimerInterval("GetMeterReading",$TimerMS);
 
-		$TimerMin = $this->ReadPropertyInteger("CostCalculator") * 1000 * 60;
+		$TimerMin = $this->ReadPropertyInteger("TimerCostCalculator") * 1000 * 60;
 		$this->SetTimerInterval("CalculateCosts",$TimerMin);
 		
 		$archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
@@ -108,7 +126,7 @@ if (!defined('vtBoolean')) {
 		$password = $this->ReadPropertyString("Password");
 		$SmartmeterUID = $this->ReadPropertyString("SmartmeterUID");
 		$ConsumptionMain = $this->ReadPropertyBoolean("ConsumptionMain");
-		$ConsumptionMainaWATTar = $this->ReadPropertyBoolean("ConsumptionMainaWATTar");
+		$CostCalculationMethod = $this->ReadPropertyInteger("CostCalculationMethod");
 		$EarningsCalculation = $this->ReadPropertyBoolean("EarningsCalculation");
 		$ConsumptionSecondary = $this->ReadPropertyBoolean("ConsumptionSecondary");
 		$Sale = $this->ReadPropertyBoolean("Sale");
@@ -170,27 +188,16 @@ if (!defined('vtBoolean')) {
 						$this->RegisterVariableFloat("voltage1", $this->Translate('Voltage Phase 1'), "~Volt");
 						$this->RegisterVariableFloat("voltage2", $this->Translate('Voltage Phase 2'), "~Volt");
 						$this->RegisterVariableFloat("voltage3", $this->Translate('Voltage Phase 3'), "~Volt");
-						if ($ConsumptionMain == true) {
+						if ($CostCalculationMethod > 0) {
 							$this->RegisterVariableFloat("CostEnergykWh", $this->Translate('Cost per kwH'), "~Euro");
 							$this->RegisterVariableFloat("CalculatedCost", $this->Translate('Calculated Cost HT'), "~Euro");
-							$energyID = $this->GetIDForIdent('energy');
-							$CalculatedCostID = $this->GetIDForIdent('CalculatedCost');
-							AC_SetLoggingStatus($archiveID, $energyID, true);
-							AC_SetAggregationType($archiveID, $energyID, 1);
-							AC_SetLoggingStatus($archiveID, $CalculatedCostID, true);
-							AC_SetAggregationType($archiveID, $CalculatedCostID, 1);
-							IPS_ApplyChanges($archiveID);
+							$this->RegisterVariableInteger("CostCalculationMethod", $this->Translate('Cost Calculation Method'),"DSM.CostCalculationMethod");
 						}
 						if ($EarningsCalculation == true) {
 							$this->RegisterVariableFloat("CompensationEnergykWh", $this->Translate('Compensation per kWh'), "~Euro");
 							$this->RegisterVariableFloat("CalculatedEarnings", $this->Translate('Calculated Earnings'), "~Euro");
 							$energyoutID = $this->GetIDForIdent('energyout');
 							$CalculatedEarningsID = $this->GetIDForIdent('CalculatedEarnings');
-							AC_SetLoggingStatus($archiveID, $energyoutID, true);
-							AC_SetAggregationType($archiveID, $energyoutID, 1);
-							AC_SetLoggingStatus($archiveID, $CalculatedEarningsID, true);
-							AC_SetAggregationType($archiveID, $CalculatedEarningsID, 1);
-							IPS_ApplyChanges($archiveID);
 						}			
 					}
 			
@@ -201,38 +208,21 @@ if (!defined('vtBoolean')) {
 						$this->RegisterVariableFloat("sold_power_complete", $this->Translate('Sold Power Complete'), "DSM.WattK");
 						$this->RegisterVariableFloat("sold_power_main", $this->Translate('Sold Power Main Time'), "DSM.WattK");
 						$this->RegisterVariableFloat("sold_power_secondary", $this->Translate('Sold Power Secondary Time'), "DSM.WattK");
-						if ($ConsumptionMain == true) {
+						if ($CostCalculationMethod > 0) {
 							$this->RegisterVariableFloat("CostEnergykWh", $this->Translate('Cost per kWh HT'), "~Euro");
 							$this->RegisterVariableFloat("CalculatedCost", $this->Translate('Calculated Cost HT'), "~Euro");
-							$effective_power_mainID = $this->GetIDForIdent('effective_power_main');
-							$CalculatedCostID = $this->GetIDForIdent('CalculatedCost');
-							AC_SetLoggingStatus($archiveID, $effective_power_mainID, true);
-							AC_SetAggregationType($archiveID, $effective_power_mainID, 1);
-							AC_SetLoggingStatus($archiveID, $CalculatedCostID, true);
-							AC_SetAggregationType($archiveID, $CalculatedCostID, 1);
-							IPS_ApplyChanges($archiveID);
+							$this->RegisterVariableInteger("CostCalculationMethod", $this->Translate('Cost Calculation Method'),"DSM.CostCalculationMethod");
 						}
+
 						if ($ConsumptionSecondary == true) {
 							$this->RegisterVariableFloat("CostEnergykWhSecondary", $this->Translate('Cost per kWh NT'), "~Euro");
 							$this->RegisterVariableFloat("CalculatedCostSecondary", $this->Translate('Calculated Cost NT'), "~Euro");
-							$effective_power_secondaryID = $this->GetIDForIdent('effective_power_secondary');
-							$CalculatedCostSecondaryID = $this->GetIDForIdent('CalculatedCostSecondary');
-							AC_SetLoggingStatus($archiveID, $effective_power_secondaryID, true);
-							AC_SetAggregationType($archiveID, $effective_power_secondaryID, 1);
-							AC_SetLoggingStatus($archiveID, $CalculatedCostSecondaryID, true);
-							AC_SetAggregationType($archiveID, $CalculatedCostSecondaryID, 1);
-							IPS_ApplyChanges($archiveID);
 						}
 						if ($EarningsCalculation == true) {
 							$this->RegisterVariableFloat("CompensationEnergykWh", $this->Translate('Compensation per kwH'), "~Euro");
 							$this->RegisterVariableFloat("CalculatedEarnings", $this->Translate('Calculated Earnings'), "~Euro");
 							$sold_power_mainID = $this->GetIDForIdent('sold_power_main');
 							$CalculatedEarningsID = $this->GetIDForIdent('CalculatedEarnings');
-							AC_SetLoggingStatus($archiveID, $sold_power_mainID, true);
-							AC_SetAggregationType($archiveID, $sold_power_mainID, 1);
-							AC_SetLoggingStatus($archiveID, $CalculatedEarningsID, true);
-							AC_SetAggregationType($archiveID, $CalculatedEarningsID, 1);
-							IPS_ApplyChanges($archiveID);
 						}					
 					}	
 
@@ -243,11 +233,6 @@ if (!defined('vtBoolean')) {
 							$this->RegisterVariableFloat("CalculatedCost", $this->Translate('Calculated Cost Gas'), "~Euro");
 							$gas_usageID = $this->GetIDForIdent('gas_usageID');
 							$CalculatedCostID = $this->GetIDForIdent('CalculatedCost');
-							AC_SetLoggingStatus($archiveID, $gas_usageID, true);
-							AC_SetAggregationType($archiveID, $gas_usageID, 1);
-							AC_SetLoggingStatus($archiveID, $CalculatedCostID, true);
-							AC_SetAggregationType($archiveID, $CalculatedCostID, 1);
-							IPS_ApplyChanges($archiveID);
 						}
 					}
 				}
@@ -255,13 +240,15 @@ if (!defined('vtBoolean')) {
 
 		}
 		
-		//Set hourly timer to get aWATTar data 
+		//Set hourly timer to get aWATTar or Tibber data 
 
-		if ($ConsumptionMainaWATTar == 1) {
-			$this->QueryAWATTAR(); // get current data
+		SetValue($this->GetIDForIdent('CostCalculationMethod'), $CostCalculationMethod);
 
-			$this->SetTimerInterval("QueryAWATTAR",3600000);
-			$CurrentTimer = $this->GetTimerInterval("QueryAWATTAR");
+		if ($CostCalculationMethod > 1) {
+			$this->QueryEnergyCostHourly(); // get current data
+
+			$this->SetTimerInterval("Query Energy Cost Hourly",3600000);
+			$CurrentTimer = $this->GetTimerInterval("Query Energy Cost Hourly");
 			//if ($CurrentTimer == 0) {
 				$now = new DateTime();
 				$target = new DateTime();
@@ -270,18 +257,98 @@ if (!defined('vtBoolean')) {
 				$target->setTime($nextHour, 00, 0);
 				$diff = $target->getTimestamp() - $now->getTimestamp();
 				$EvaTimer = $diff * 1000;
-				$this->SetTimerInterval('QueryAWATTAR', $EvaTimer);
+				$this->SetTimerInterval('Query Energy Cost Hourly', $EvaTimer);
 				//$this->SetTimerInterval("QueryAWATTAR",3600000);
 			//}
 		}
-		else if ($ConsumptionMainaWATTar == 0) {
-			$this->SetTimerInterval("QueryAWATTAR",0);
+		else if ($CostCalculationMethod < 2) {
+			$this->SetTimerInterval("Query Energy Cost Hourly",0);
 		}
 			
 	}
+
+	public function TurnArchivingOn() {
+
+		$archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
+		$manufacturerId = GetValue($this->GetIDForIdent("manufacturerId"));
+		$CostCalculationMethod = $this->ReadPropertyInteger("CostCalculationMethod");
+		$ConsumptionMain = $this->ReadPropertyBoolean("ConsumptionMain");
+		$ConsumptionSecondary = $this->ReadPropertyBoolean("ConsumptionSecondary");
+		$EarningsCalculation = $this->ReadPropertyBoolean("EarningsCalculation");
+
+		If ($CostCalculationMethod > 0) {
 		
-	public function GetMeterReading()
-	{
+			if ($manufacturerId == "ESY") {
+			
+				if ($ConsumptionMain == true) {
+					$energyID = $this->GetIDForIdent('energy');
+					$CalculatedCostID = $this->GetIDForIdent('CalculatedCost');
+					AC_SetLoggingStatus($archiveID, $energyID, true);
+					AC_SetAggregationType($archiveID, $energyID, 1);
+					AC_SetLoggingStatus($archiveID, $CalculatedCostID, true);
+					AC_SetAggregationType($archiveID, $CalculatedCostID, 1);
+					IPS_ApplyChanges($archiveID);
+				}
+				if ($EarningsCalculation == true) {
+					$energyoutID = $this->GetIDForIdent('energyout');
+					$CalculatedEarningsID = $this->GetIDForIdent('CalculatedEarnings');
+					AC_SetLoggingStatus($archiveID, $energyoutID, true);
+					AC_SetAggregationType($archiveID, $energyoutID, 1);
+					AC_SetLoggingStatus($archiveID, $CalculatedEarningsID, true);
+					AC_SetAggregationType($archiveID, $CalculatedEarningsID, 1);
+					IPS_ApplyChanges($archiveID);
+				}
+			}	
+
+			else if ($manufacturerId == "EMH") {
+				
+				if ($ConsumptionMain == true) {
+					$effective_power_mainID = $this->GetIDForIdent('effective_power_main');
+					$CalculatedCostID = $this->GetIDForIdent('CalculatedCost');
+					AC_SetLoggingStatus($archiveID, $effective_power_mainID, true);
+					AC_SetAggregationType($archiveID, $effective_power_mainID, 1);
+					AC_SetLoggingStatus($archiveID, $CalculatedCostID, true);
+					AC_SetAggregationType($archiveID, $CalculatedCostID, 1);
+					IPS_ApplyChanges($archiveID);
+				}
+
+				if ($ConsumptionSecondary == true) {
+					$effective_power_secondaryID = $this->GetIDForIdent('effective_power_secondary');
+					$CalculatedCostSecondaryID = $this->GetIDForIdent('CalculatedCostSecondary');
+					AC_SetLoggingStatus($archiveID, $effective_power_secondaryID, true);
+					AC_SetAggregationType($archiveID, $effective_power_secondaryID, 1);
+					AC_SetLoggingStatus($archiveID, $CalculatedCostSecondaryID, true);
+					AC_SetAggregationType($archiveID, $CalculatedCostSecondaryID, 1);
+					IPS_ApplyChanges($archiveID);
+				}
+				if ($EarningsCalculation == true) {
+					$sold_power_mainID = $this->GetIDForIdent('sold_power_main');
+					$CalculatedEarningsID = $this->GetIDForIdent('CalculatedEarnings');
+					AC_SetLoggingStatus($archiveID, $sold_power_mainID, true);
+					AC_SetAggregationType($archiveID, $sold_power_mainID, 1);
+					AC_SetLoggingStatus($archiveID, $CalculatedEarningsID, true);
+					AC_SetAggregationType($archiveID, $CalculatedEarningsID, 1);
+					IPS_ApplyChanges($archiveID);
+				}					
+			}
+		}	
+		/*
+		else if ($manufacturerId == "ELS") {
+				$gas_usageID = $this->GetIDForIdent('gas_usageID');
+				$CalculatedCostID = $this->GetIDForIdent('CalculatedCost');
+				AC_SetLoggingStatus($archiveID, $gas_usageID, true);
+				AC_SetAggregationType($archiveID, $gas_usageID, 1);
+				AC_SetLoggingStatus($archiveID, $CalculatedCostID, true);
+				AC_SetAggregationType($archiveID, $CalculatedCostID, 1);
+				IPS_ApplyChanges($archiveID);
+			}
+		}
+		*/
+
+	}
+
+		
+	public function GetMeterReading() {
 
 		$username = $this->ReadPropertyString("UserName");
 		$password = $this->ReadPropertyString("Password");
@@ -407,41 +474,162 @@ if (!defined('vtBoolean')) {
 		}
 	}
 
-	public function QueryAWATTAR() {
+	public function QueryEnergyCostHourly() {
 
-		$BasePrice = $this->ReadPropertyString("BasePrice");
+		$CostCalculationMethod = $this->ReadPropertyInteger("CostCalculationMethod");
+		$this->SendDebug($this->Translate('Get current energy price'),$CostCalculationMethod,0);
 
-		$curl = curl_init('https://api-test.awattar.de/v1/optimizer');
+		if ($CostCalculationMethod < 2) {
+			$this->SendDebug($this->Translate('Get current energy price'),$this->Translate('Automatic price calculated is off or set to manual prices. Please select aWATTar or Tibber as providers'),0);
+		}
+
+		else if ($CostCalculationMethod == 2) {
+			$BasePrice = $this->ReadPropertyString("BasePrice");
+			
+			$curl = curl_init('https://api-test.awattar.de/v1/optimizer');
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+			curl_setopt($curl, CURLOPT_TIMEOUT, 5);
+			curl_setopt($curl, CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
+
+			$json = curl_exec($curl);
+
+			//echo $json,"\n"; //An dieser Stelle kann man alle Werte ausgeben - zur Kontrolle
+
+			$data = json_decode($json);
+
+			$CurrentPriceMWh = $data->data->current->price;
+			$CurrentPrice = $CurrentPriceMWh / 1000;
+			$this->SendDebug($this->Translate('aWATTar'),$this->Translate('Current cost per kWh: ').$CurrentPrice,0);
+			$CostEnergykWh = $BasePrice + ($CurrentPrice * 1.19);
+			$this->SendDebug($this->Translate('aWATTar'),$this->Translate('Current cost per kWh incl Base Price: ').$CostEnergykWh,0);
+
+			If ($CostCalculationMethod == 2) {
+				SetValue($this->GetIDForIdent('CostEnergykWh'), $CostEnergykWh);
+			}
+
+			/*
+
+			$aWATTarCalculateConsumptionMain = $this->ReadPropertyBoolean("aWATTarCalculateConsumptionMain");
+			$CurrentTimer = $this->GetTimerInterval("QueryAWATTAR");
+			if (($CurrentTimer > 0) AND ($CostCalculationMethod == 1)) {
+				$this->SetTimerInterval("QueryAWATTAR", 3600000);
+			}
+
+			*/
+		}
+
+		else if ($CostCalculationMethod == 3) {
+
+			//$EnergyCostArchiveTibberEnabled = $this->ReadPropertyBoolean("EnergyCostArchiveTibberEnabled");
+			$CostCalculationMethod = $this->ReadPropertyInteger("CostCalculationMethod");
+			$TibberAPIKey = $this->ReadPropertyString("TibberAPIKey");
+
+			if ($TibberAPIKey != "") {
+
+				$json = '{"query":"{viewer {homes {currentSubscription {priceInfo {current {total energy tax startsAt }}}}}}"}';
+
+				$curl = curl_init('https://api.tibber.com/v1-beta/gql');
+				curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+				curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+				curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+				curl_setopt($curl, CURLOPT_TIMEOUT, 5);
+				curl_setopt($curl, CURLOPT_HTTPHEADER, 
+				array('Content-Type: application/json',  
+				'Authorization: Bearer '.$TibberAPIKey)); // Demo token
+				curl_setopt($curl, CURLOPT_POST, true);
+				curl_setopt($curl, CURLOPT_POSTFIELDS, $json);
+				curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+				curl_setopt($curl, CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
+
+				$json = curl_exec($curl);
+				$data = json_decode($json);
+
+				$current = $data->data->viewer->homes[0];
+				/*
+				$total = $current->currentSubscription->priceInfo->current->total;
+				var_dump($total);
+
+				$energy = $current->currentSubscription->priceInfo->current->energy;
+				var_dump($energy);
+
+				$tax = $current->currentSubscription->priceInfo->current->tax;
+				var_dump($tax); 
+				*/
+
+				
+				$CurrentPricekwh = $current->currentSubscription->priceInfo->current->total;
+				$this->SendDebug($this->Translate('Tibber'),$this->Translate('Current cost per kWh: ').$CurrentPricekwh,0);
+				If ($CostCalculationMethod == 3) {
+					SetValue($this->GetIDForIdent('CostEnergykWh'), $CurrentPricekwh);
+				}
+			}
+
+			Else {
+				$this->SendDebug($this->Translate('Tibber'),$this->Translate('API is empty - please set YOUR Api Key for Tibber'),0);
+				echo 'API is empty - please set YOUR Api Key for Tibber';
+			}
+
+		}
+
+		
+
+	}
+
+	public function QueryTibberCostAhead() {
+
+		//$EnergyCostArchiveTibberEnabled = $this->ReadPropertyBoolean("EnergyCostArchiveTibberEnabled");
+
+		$json = '{"query":"{viewer {homes {currentSubscription {priceInfo {current {total energy tax startsAt }}}}}}"}';
+
+		$curl = curl_init('https://api.tibber.com/v1-beta/gql');
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
 		curl_setopt($curl, CURLOPT_TIMEOUT, 5);
+		curl_setopt($curl, CURLOPT_HTTPHEADER, 
+		array('Content-Type: application/json',  
+		'Authorization: Bearer d1007ead2dc84a2b82f0de19451c5fb22112f7ae11d19bf2bedb224a003ff74a')); // Demo token
+		curl_setopt($curl, CURLOPT_POST, true);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $json);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl, CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
 
 		$json = curl_exec($curl);
-
-		//echo $json,"\n"; //An dieser Stelle kann man alle Werte ausgeben - zur Kontrolle
-
 		$data = json_decode($json);
 
-		$CurrentPriceMWh = $data->data->current->price;
-		$CurrentPrice = $CurrentPriceMWh / 1000;
-		$this->SendDebug($this->Translate('aWATTar'),$this->Translate('Current cost per kWh: ').$CurrentPrice,0);
-		$CostEnergykWh = $BasePrice + ($CurrentPrice * 1.16);
+		$current = $data->data->viewer->homes[0];
+		/*
+		$total = $current->currentSubscription->priceInfo->current->total;
+		var_dump($total);
 
-		SetValue($this->GetIDForIdent('CostEnergykWh'), $CostEnergykWh);
+		$energy = $current->currentSubscription->priceInfo->current->energy;
+		var_dump($energy);
 
-		$ConsumptionMainaWATTar = $this->ReadPropertyBoolean("ConsumptionMainaWATTar");
-		$CurrentTimer = $this->GetTimerInterval("QueryAWATTAR");
-		if (($CurrentTimer > 0) AND ($ConsumptionMainaWATTar == 1)) {
-			$this->SetTimerInterval("QueryAWATTAR", 3600000);
+		$tax = $current->currentSubscription->priceInfo->current->tax;
+		var_dump($tax); 
+		*/
+
+		
+		$CurrentPricekwh = $current->currentSubscription->priceInfo->current->total[0];
+		$this->SendDebug($this->Translate('Tibber'),$this->Translate('Current cost per kWh: ').$CurrentPricekwh,0);
+
+		//SetValue($this->GetIDForIdent('CostEnergykWh'), $CostEnergykWh);
+		/*
+		if ($EnergyCostArchiveTibberEnabled == 1) {
+			//SetValue($this->GetIDForIdent('EnergyCostArchiveTibber'), $CurrentPricekwh);
 		}
+		*/
+
 	}
 
 	public function CalculateCosts() {
 		
 		$manufacturerId = GetValue($this->GetIDForIdent('manufacturerId'));
-		$CostCalculatorInterval = $this->ReadPropertyInteger("CostCalculator");
+		$CostCalculatorInterval = $this->ReadPropertyInteger("TimerCostCalculator");
+
+		SetValue($this->GetIDForIdent('CostCalculationMethod'),$this->ReadPropertyInteger("CostCalculationMethod")); 
 
 		if ($manufacturerId == "ESY") {
 
