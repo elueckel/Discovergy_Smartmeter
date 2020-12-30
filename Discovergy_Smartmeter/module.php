@@ -114,6 +114,7 @@ if (!defined('vtBoolean')) {
 		$EarningsCalculation = $this->ReadPropertyBoolean("EarningsCalculation");
 		$ConsumptionSecondary = $this->ReadPropertyBoolean("ConsumptionSecondary");
 		$Sale = $this->ReadPropertyBoolean("Sale");
+		$ConsumptionGas = $this->ReadPropertyBoolean("ConsumptionGas");
 
 		if (($username !== "") AND ($password !== "") AND ($SmartmeterUID !== "")) {
 			
@@ -258,6 +259,7 @@ if (!defined('vtBoolean')) {
 		$ConsumptionMain = $this->ReadPropertyBoolean("ConsumptionMain");
 		$ConsumptionSecondary = $this->ReadPropertyBoolean("ConsumptionSecondary");
 		$EarningsCalculation = $this->ReadPropertyBoolean("EarningsCalculation");
+		$ConsumptionGas = $this->ReadPropertyBoolean("ConsumptionGas");
 
 		If ($CostCalculationMethod > 0) {
 		
@@ -314,19 +316,17 @@ if (!defined('vtBoolean')) {
 					IPS_ApplyChanges($archiveID);
 				}					
 			}
-		}	
-		/*
-		else if ($manufacturerId == "ELS") {
-				$gas_usageID = $this->GetIDForIdent('gas_usageID');
-				$CalculatedCostID = $this->GetIDForIdent('CalculatedCost');
-				AC_SetLoggingStatus($archiveID, $gas_usageID, true);
-				AC_SetAggregationType($archiveID, $gas_usageID, 1);
-				AC_SetLoggingStatus($archiveID, $CalculatedCostID, true);
-				AC_SetAggregationType($archiveID, $CalculatedCostID, 1);
-				IPS_ApplyChanges($archiveID);
-			}
 		}
-		*/
+		
+		if ($ConsumptionGas == 1 AND $manufacturerId == "ELS") {
+			$gas_usageID = $this->GetIDForIdent('gas_usageID');
+			$CalculatedCostID = $this->GetIDForIdent('CalculatedCost');
+			AC_SetLoggingStatus($archiveID, $gas_usageID, true);
+			AC_SetAggregationType($archiveID, $gas_usageID, 1);
+			AC_SetLoggingStatus($archiveID, $CalculatedCostID, true);
+			AC_SetAggregationType($archiveID, $CalculatedCostID, 1);
+			IPS_ApplyChanges($archiveID);
+		}
 
 	}
 
