@@ -31,4 +31,11 @@ Daten Einspeisezähler:
 * Berechnung der Kosten oder Erlöse (ACHTUNG - Bei Kosten und Ertragsberechnung werden die Variablen automatisch Archiviert - für die Auswertung)
 * Integration von aWATTar für die dynamische Berechnung von Stromkosten
 
+## Version 2.1 (30.12.2020)
+* Überarbeitung der Kostenberechnung (generische Ansatz)
+* Unterstützung von Tibber als Stromlieferanten neben aWATTar
+* Neues Variablen Profil für Stromkosten mit 4 Nachkommastellen
+* Update Konfigurations UI
+* Hoffentlich jetzt kompatibel mit dem Module Store obwohl die Archivierung immer noch automatisch aktivert wird
+
 Sollten weitere Zähler benötigt werden bitte im Forum https://www.symcon.de/forum/threads/43805-Modul-Discovergy-Smartmeter-die-zweite-f%C3%BCr-Module-Store  posten. Für den Einbau benötige ich 'manufacturerId' und evtl. ein Beispiel JSON. Bitte melden.
