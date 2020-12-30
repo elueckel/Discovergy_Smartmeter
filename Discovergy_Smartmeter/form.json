@@ -17,12 +17,16 @@
 			"items": [
 				{ "type": "Label", "label": "***** IMPORTANT ******"},
 				{ "type": "Label", "label": "For cost calculation to work archiving needs to be enabled!!!"},
-				{ "type": "Label", "label": "Clicking the button below - Enabled Archiving - will turn archiving on for respective variables"},
-				{ "type": "Label", "label": "Cost & earnings per kWh can be set in the object tree"},
+				{ "type": "Label", "label": "Clicking the button below - Enable Archiving - will turn on archiving on for respective variables"},
+				{ "type": "Label", "label": "Costs & earnings per KwH can be set in the object tree or obtained from aWATTar or Tibber automatically (Costs)"},
+				{
+					"type": "Label",
+					"label": "To set costs/earnings per kWH manually please enter them at Costs per kWh and Earnings per kWh"
+				},
 				{
 					"type": "Select",
 					"name": "CostCalculationMethod",
-					"caption": "Method to calculated cost",
+					"caption": "Method to calculate cost",
 					"options": [
 						{
 							"caption": "Off",
@@ -90,11 +94,6 @@
 									"type": "ValidationTextBox",
 									"name": "BasePrice",
 									"caption": "aWATTar Base Price"
-								},
-								{
-									"type": "CheckBox",
-									"name": "aWATTarHistoricPrices",
-									"caption": "Safe aWATTar energy prices"
 								}
 							]
 						}
@@ -106,7 +105,7 @@
 					"items": [
 						{
 							"type": "Label",
-							"label": "aWATTAR Settings"
+							"label": "To obtain costs an other data points, you have to enter your Tibber API key https://developer.tibber.com/docs/guides/calling-api"
 						},
 						{
 							"type": "RowLayout",
@@ -115,11 +114,6 @@
 									"type": "ValidationTextBox",
 									"name": "TibberAPIKey",
 									"caption": "Tibber API Key"
-								},
-								{
-									"type": "CheckBox",
-									"name": "TibberHistoricPrices",
-									"caption": "Safe Tibber energy prices"
 								}
 							]
 						}

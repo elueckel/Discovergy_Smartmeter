@@ -63,6 +63,15 @@ if (!defined('vtBoolean')) {
 				IPS_SetVariableProfileText("DSM.WattK", "", " kWh");
 			}
 
+			if (IPS_VariableProfileExists("DSM.Euro4Digits") == false) {
+				IPS_CreateVariableProfile("DSM.Euro4Digits", 2);
+				IPS_SetVariableProfileIcon("DSM.Euro4Digits", "Euro");
+				IPS_SetVariableProfileDigits("DSM.Euro4Digits", 4);
+				IPS_SetVariableProfileText("DSM.Euro4Digits", "", " €");
+			}
+
+			
+
 			if (IPS_VariableProfileExists("DSM.CostCalculationMethod") == false){
 					IPS_CreateVariableProfile("DSM.CostCalculationMethod", 1);
 					IPS_SetVariableProfileIcon("DSM.Watt", "Euro");
@@ -75,32 +84,7 @@ if (!defined('vtBoolean')) {
 			//Component sets timer, but default is OFF
 			$this->RegisterTimer("GetMeterReading",0,"DSM_GetMeterReading(\$_IPS['TARGET']);");
 			$this->RegisterTimer("Query Energy Cost Hourly",0,"DSM_QueryEnergyCostHourly(\$_IPS['TARGET']);");
-			//$this->RegisterTimer("QueryTibber",0,"DSM_QueryTibber(\$_IPS['TARGET']);");
 			$this->RegisterTimer("CalculateCosts",0,"DSM_CalculateCosts(\$_IPS['TARGET']);");
-
-			/*
-			$ConsumptionMainaWATTar = $this->ReadPropertyBoolean("ConsumptionMainaWATTar");
-			if ($ConsumptionMainaWATTar == 1) {
-				$this->QueryAWATTAR(); // get current data
-	
-				$this->SetTimerInterval("QueryAWATTAR",3600000);
-				$CurrentTimer = $this->GetTimerInterval("QueryAWATTAR");
-				//if ($CurrentTimer == 0) {
-					$now = new DateTime();
-					$target = new DateTime();
-					$now->getTimestamp();
-					$nextHour = (intval($now->format('H'))+1) % 24;
-					$target->setTime($nextHour, 00, 0);
-					$diff = $target->getTimestamp() - $now->getTimestamp();
-					$EvaTimer = $diff * 1000;
-					$this->SetTimerInterval('QueryAWATTAR', $EvaTimer);
-					//$this->SetTimerInterval("QueryAWATTAR",3600000);
-				//}
-			}
-			else if ($ConsumptionMainaWATTar == 0) {
-				$this->SetTimerInterval("QueryAWATTAR",0);
-			}
-			*/
 					
 		}
 	
@@ -167,15 +151,15 @@ if (!defined('vtBoolean')) {
 					$locationCountry = $meter->location->country;
 					$meterlocation = $locationStreet." ".$locationStreetNumber." ".$locationzip." ".$locationCity." ".$locationCountry;
 
-					$this->RegisterVariableString("meterlocation", "Meter Location", "");
+					$this->RegisterVariableString("meterlocation", $this->Translate("Meter Location"), "");
 					SetValue($this->GetIDForIdent("meterlocation"), $meterlocation);
-					$this->RegisterVariableString("fullSerialNumber", "Full Serialnumber", "");
+					$this->RegisterVariableString("fullSerialNumber", $this->Translate("Full Serialnumber"), "");
 					SetValue($this->GetIDForIdent("fullSerialNumber"), $fullSerialNumber);
-					$this->RegisterVariableString("serialnumber", "Serialnumber", "");
+					$this->RegisterVariableString("serialnumber", $this->Translate("Serialnumber"), "");
 					SetValue($this->GetIDForIdent("serialnumber"), $serialnumber);
-					$this->RegisterVariableString("meterID", "Meter UID", "");
+					$this->RegisterVariableString("meterID", $this->Translate("Meter UID"), "");
 					SetValue($this->GetIDForIdent("meterID"), rtrim($meterid,""));
-					$this->RegisterVariableString("manufacturerId", "Manufacturer ID", "");
+					$this->RegisterVariableString("manufacturerId", $this->Translate("Manufacturer ID"), "");
 					SetValue($this->GetIDForIdent("manufacturerId"), $manufacturerId);				
 
 					if ($manufacturerId == "ESY") {
@@ -192,6 +176,7 @@ if (!defined('vtBoolean')) {
 							$this->RegisterVariableFloat("CostEnergykWh", $this->Translate('Cost per kwH'), "~Euro");
 							$this->RegisterVariableFloat("CalculatedCost", $this->Translate('Calculated Cost HT'), "~Euro");
 							$this->RegisterVariableInteger("CostCalculationMethod", $this->Translate('Cost Calculation Method'),"DSM.CostCalculationMethod");
+							SetValue($this->GetIDForIdent("CostCalculationMethod"), 0);
 						}
 						if ($EarningsCalculation == true) {
 							$this->RegisterVariableFloat("CompensationEnergykWh", $this->Translate('Compensation per kWh'), "~Euro");
@@ -212,6 +197,7 @@ if (!defined('vtBoolean')) {
 							$this->RegisterVariableFloat("CostEnergykWh", $this->Translate('Cost per kWh HT'), "~Euro");
 							$this->RegisterVariableFloat("CalculatedCost", $this->Translate('Calculated Cost HT'), "~Euro");
 							$this->RegisterVariableInteger("CostCalculationMethod", $this->Translate('Cost Calculation Method'),"DSM.CostCalculationMethod");
+							SetValue($this->GetIDForIdent("CostCalculationMethod"), 0);
 						}
 
 						if ($ConsumptionSecondary == true) {
@@ -242,24 +228,21 @@ if (!defined('vtBoolean')) {
 		
 		//Set hourly timer to get aWATTar or Tibber data 
 
-		SetValue($this->GetIDForIdent('CostCalculationMethod'), $CostCalculationMethod);
+		
 
 		if ($CostCalculationMethod > 1) {
 			$this->QueryEnergyCostHourly(); // get current data
 
 			$this->SetTimerInterval("Query Energy Cost Hourly",3600000);
 			$CurrentTimer = $this->GetTimerInterval("Query Energy Cost Hourly");
-			//if ($CurrentTimer == 0) {
-				$now = new DateTime();
-				$target = new DateTime();
-				$now->getTimestamp();
-				$nextHour = (intval($now->format('H'))+1) % 24;
-				$target->setTime($nextHour, 00, 0);
-				$diff = $target->getTimestamp() - $now->getTimestamp();
-				$EvaTimer = $diff * 1000;
-				$this->SetTimerInterval('Query Energy Cost Hourly', $EvaTimer);
-				//$this->SetTimerInterval("QueryAWATTAR",3600000);
-			//}
+			$now = new DateTime();
+			$target = new DateTime();
+			$now->getTimestamp();
+			$nextHour = (intval($now->format('H'))+1) % 24;
+			$target->setTime($nextHour, 00, 0);
+			$diff = $target->getTimestamp() - $now->getTimestamp();
+			$EvaTimer = $diff * 1000;
+			$this->SetTimerInterval('Query Energy Cost Hourly', $EvaTimer);
 		}
 		else if ($CostCalculationMethod < 2) {
 			$this->SetTimerInterval("Query Energy Cost Hourly",0);
@@ -509,20 +492,10 @@ if (!defined('vtBoolean')) {
 				SetValue($this->GetIDForIdent('CostEnergykWh'), $CostEnergykWh);
 			}
 
-			/*
-
-			$aWATTarCalculateConsumptionMain = $this->ReadPropertyBoolean("aWATTarCalculateConsumptionMain");
-			$CurrentTimer = $this->GetTimerInterval("QueryAWATTAR");
-			if (($CurrentTimer > 0) AND ($CostCalculationMethod == 1)) {
-				$this->SetTimerInterval("QueryAWATTAR", 3600000);
-			}
-
-			*/
 		}
 
 		else if ($CostCalculationMethod == 3) {
 
-			//$EnergyCostArchiveTibberEnabled = $this->ReadPropertyBoolean("EnergyCostArchiveTibberEnabled");
 			$CostCalculationMethod = $this->ReadPropertyInteger("CostCalculationMethod");
 			$TibberAPIKey = $this->ReadPropertyString("TibberAPIKey");
 
@@ -577,9 +550,10 @@ if (!defined('vtBoolean')) {
 
 	}
 
+	//Future Use 
 	public function QueryTibberCostAhead() {
 
-		//$EnergyCostArchiveTibberEnabled = $this->ReadPropertyBoolean("EnergyCostArchiveTibberEnabled");
+		
 
 		$json = '{"query":"{viewer {homes {currentSubscription {priceInfo {current {total energy tax startsAt }}}}}}"}';
 
@@ -701,7 +675,7 @@ if (!defined('vtBoolean')) {
 
 			//Calculate Consumption
 			$archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
-			$CostCalculatorInterval = $this->ReadPropertyInteger("CostCalculator");
+			$CostCalculatorInterval = $this->ReadPropertyInteger("TimerCostCalculator");
 			$CostEnergykWh = GetValue($this->GetIDForIdent('CostEnergykWh'));
 
 			$Energy = $this->GetIDForIdent('effective_power_main'); //Variable where sold energy for ESY meter is stored
@@ -880,7 +854,7 @@ if (!defined('vtBoolean')) {
 				$meterid = $meter->meterId;
 				$manufacturerId = $meter->manufacturerId;
 				
-				echo "UID ".$meterid." Type ".$manufacturerId." // ";
+				echo "UID ".trim($meterid)." Type ".$manufacturerId." // ";
 				
 			}
 		}	
