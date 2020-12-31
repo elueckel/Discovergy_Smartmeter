@@ -715,7 +715,7 @@ if (!defined('vtBoolean')) {
 			$ConsumptionSecondary = $this->ReadPropertyBoolean("ConsumptionSecondary");
 			
 			if ($ConsumptionSecondary == 1) {
-				$CostCalculatorInterval = $this->ReadPropertyInteger("CostCalculator");
+				$CostCalculatorInterval = $this->ReadPropertyInteger("TimerCostCalculator");
 				$CostEnergykWhSecondary = GetValue($this->GetIDForIdent('CostEnergykWhSecondary'));
 
 				$Energy = $this->GetIDForIdent('effective_power_secondary'); //Variable where sold energy for ESY meter is stored
