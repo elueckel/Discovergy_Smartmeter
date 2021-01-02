@@ -40,4 +40,11 @@ In general different meters provide different data points. Please also check the
 * Calculation of cost and earnings (PV) - WARNING ... if enabled variables for consumption and earnings will be automatically archived.
 * Integration of aWATTar smart tarifs
 
+## Version 2.1 (30.12.2020)
+* Rewrite of cost calulation to make it more generic
+* Support of Tibber next to aWATTar as an energy provider
+* New profile for for energy costs and earnings with 4 digits
+* Updated config UI
+* Hopefully now Module store compliant while still enabling automatic archiving
+
 For other unsupported meters, please post a message into the forum: https://www.symcon.de/forum/threads/43805-Modul-Discovergy-Smartmeter-die-zweite-f%C3%BCr-Module-Store?highlight=smartmeter

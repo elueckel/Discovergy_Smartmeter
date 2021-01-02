@@ -10,49 +10,178 @@
 		{ "type": "Label", "label": "2. Copy the UID of the meter into the field below and safe the form" },
 		{ "type": "ValidationTextBox", "name": "SmartmeterUID", "caption": "Smartmeter UID" },		
 		{ "type": "Label", "label": "Update Timer (0 = off)" },
-		{ "type": "NumberSpinner", "name": "Timer", "caption": "Request Timer", "suffix": "seconds", "minimum": 0},
+		{ "type": "NumberSpinner", "name": "TimerQueryMeter", "caption": "Request Timer", "suffix": "seconds", "minimum": 0},
 		{
 			"type": "ExpansionPanel",
 			"caption": "Energy Cost/Earnings Calculations",
 			"items": [
 				{ "type": "Label", "label": "***** IMPORTANT ******"},
-				{ "type": "Label", "label": "1. !!! COST CALCULATION TURNS ON DATA ARCHIVING"},
-				{ "type": "Label", "label": "(affected variables Consumed/Sold Engery/Gas (kWh/m3) and corresponding cost/earnings (€)"},
-				{ "type": "Label", "label": "2. Cost & earnings per kWh can be set in the object tree"},
-				{ "type": "NumberSpinner", "name": "CostCalculator", "caption": "Cost Calculation", "suffix": "minutes", "minimum": 0},
-				{ "type": "Label", "label": "Main Energy (HT)" },
-				{ "type": "RowLayout",
-					"items": [
-						{ "type": "CheckBox", "name": "ConsumptionMain", "caption": "Enabled" },
-						{ "type": "CheckBox", "name": "ConsumptionMainaWATTar", "caption": "Use aWATTar Tarif" },
-						{ "type": "ValidationTextBox", "name": "BasePrice", "caption": "aWATTar Base Price" }
+				{ "type": "Label", "label": "For cost calculation to work archiving needs to be enabled!!!"},
+				{ "type": "Label", "label": "Clicking the button below - Enable Archiving - will turn on archiving on for respective variables"},
+				{ "type": "Label", "label": "Costs & earnings per KwH can be set in the object tree or obtained from aWATTar or Tibber automatically (Costs)"},
+				{
+					"type": "Label",
+					"label": "To set costs/earnings per kWH manually please enter them at Costs per kWh and Earnings per kWh"
+				},
+				{
+					"type": "Select",
+					"name": "CostCalculationMethod",
+					"caption": "Method to calculate cost",
+					"options": [
+						{
+							"caption": "Off",
+							"value": 0
+						},
+						{
+							"caption": "Price set manually in object tree",
+							"value": 1
+						},
+						{
+							"caption": "aWATTar",
+							"value": 2
+						},
+						{
+							"caption": "Tibber",
+							"value": 3
+						}
 					]
 				},
-				{ "type": "Label", "label": "If aWATTar tarif is enabled, the cost will automatically be updated hourly"},
-				{ "type": "Label", "label": ""},
-				{ "type": "Label", "label": "Secondary Energy Cost (NT)" },
-				{ "type": "CheckBox", "name": "ConsumptionSecondary", "caption": "Enabled" },
-				{ "type": "Label", "label": "Consumption secondary only makes sense with multi-tarif readers with heat pumps (e.g. EMH Meter)" },
-				{ "type": "Label", "label": ""},
-				{ "type": "Label", "label": "Earnings (PV)" },
-				{ "type": "CheckBox", "name": "EarningsCalculation", "caption": "Enabled" }
+				{ "type": "NumberSpinner", "name": "TimerCostCalculator", "caption": "Cost Calculation", "suffix": "minutes", "minimum": 0},
+				{
+					"type": "Label",
+					"label": "Which amounts should be calculated"
+				},
+				{
+					"type": "Label",
+					"label": "Consumption secondary only makes sense with multi-tarif readers with heat pumps (e.g. EMH Meter)"
+				},
+				{ "type": "RowLayout",
+					"items": [
+						{
+							"type": "CheckBox",
+							"name": "ConsumptionMain",
+							"caption": "Main Consumption"
+						},
+						{
+							"type": "CheckBox",
+							"name": "ConsumptionSecondary",
+							"caption": "Secondary Consumption"
+						},
+						{
+							"type": "CheckBox",
+							"name": "EarningsCalculation",
+							"caption": "PV Earnings"
+						}
+					]
+				},
+				{
+					"type": "Label",
+					"label": ""
+				},
+				{ "type": "Label", "label": "If aWATTar or Tibber are being used prices are updated hourly" },
+				{
+					"type": "ExpansionPanel",
+					"caption": "aWATTAR Settings",
+					"items": [
+						{
+							"type": "Label",
+							"label": "aWATTAR Settings"
+						},
+						{
+							"type": "RowLayout",
+							"items": [
+								{
+									"type": "ValidationTextBox",
+									"name": "BasePrice",
+									"caption": "aWATTar Base Price"
+								}
+							]
+						}
+					]
+				},
+				{
+					"type": "ExpansionPanel",
+					"caption": "Tibber Settings",
+					"items": [
+						{
+							"type": "Label",
+							"label": "To obtain costs an other data points, you have to enter your Tibber API key https://developer.tibber.com/docs/guides/calling-api"
+						},
+						{
+							"type": "RowLayout",
+							"items": [
+								{
+									"type": "ValidationTextBox",
+									"name": "TibberAPIKey",
+									"caption": "Tibber API Key"
+								}
+							]
+						}
+					]
+				}
 			]
 		},
 		{
 			"type": "ExpansionPanel",
 			"caption": "Gas: Cost Calculation",
 			"items": [
-				{ "type": "Label", "label": "1. !!! COST CALCULATION TURNS ON DATA ARCHIVING"},
-				{ "type": "Label", "label": "2. The price per m3 can be set in the object tree"},
-				{ "type": "CheckBox", "name": "ConsumptionGas", "caption": "Calculate Gas Cost" }
+				{
+					"type": "Label",
+					"label": "For cost calculation to work archiving needs to be enabled!!!"
+				},
+				{
+					"type": "Label",
+					"label": "1. Enable - Calculate Gas Cost"
+				},
+				{
+					"type": "Label",
+					"label": "2. The price per m3 can be set in the object tree"
+				},
+				{
+					"type": "Label",
+					"label": "3. The price per m3 can be set in the object tree for this meter"
+				},
+				{
+					"type": "CheckBox",
+					"name": "ConsumptionGas",
+					"caption": "Calculate Gas Cost"
+				}
 			]
 		}		
     ],
-	  "actions":
-	  [
-		{ "type": "Button", "label": "Get Meter Reading", "onClick": "DSM_GetMeterReading($id);" },
-		{ "type": "Button", "label": "Get aWATTar Data", "onClick": "DSM_QueryAWATTAR($id);" },
-		{ "type": "Button", "label": "Calculate Costs", "onClick": "DSM_CalculateCosts($id);" },
-		{ "type": "Button", "label": "Get Smartmeters for Setup", "onClick": "DSM_GetMeters($id);" }
+	"actions":
+	[
+		{
+			"type": "RowLayout",
+			"items": [
+				{
+					"type": "Button",
+					"label": "1. Get Smartmeters for Setup",
+					"onClick": "DSM_GetMeters($id);"
+				},
+				{
+					"type": "Button",
+					"label": "2. Get Meter Reading",
+					"onClick": "DSM_GetMeterReading($id);"
+				},
+				{
+					"type": "Button",
+					"label": "3. Get current Energy Cost",
+					"onClick": "DSM_QueryEnergyCostHourly($id);"
+				},
+				{
+					"type": "Button",
+					"caption": "4. Turn On archiving for statistics variables",
+					"onClick": "DSM_TurnArchivingOn($id);",
+					"confirm": "WARNING Archiving consumes hard disk space. Do you want to activate?"
+				},
+				{
+					"type": "Button",
+					"label": "5. Calculate Costs",
+					"onClick": "DSM_CalculateCosts($id);"
+				}
+				
+			]
+		}
   	]
 }
