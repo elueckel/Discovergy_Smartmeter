@@ -32,19 +32,13 @@ if (!defined('vtBoolean')) {
 			$this->RegisterPropertyBoolean("ConsumptionSecondary", 0);
 			$this->RegisterPropertyBoolean("Sale", 0);
 			$this->RegisterPropertyString("BasePrice","0.1996");
-			//$this->RegisterPropertyString("SellPrice","0.16");
+			
 			$this->RegisterPropertyBoolean("EarningsCalculation",0);
 
 			$this->RegisterPropertyString("TibberAPIKey","");
 
-			//$this->RegisterPropertyBoolean("TibberCalculateConsumptionMain", 0);
-			//$this->RegisterPropertyBoolean("TibberCalculateConsumptionMain", 0);
-
-
 			$this->RegisterPropertyBoolean("ConsumptionGas", 0);
-			//$this->RegisterPropertyString("CostEnergym3", 0);
 			
-
 			$this->RegisterPropertyInteger("TimerCostCalculator", 0);
 
 			$this->RegisterPropertyString("SmartmeterUID","");
@@ -101,8 +95,6 @@ if (!defined('vtBoolean')) {
 
 		$TimerMin = $this->ReadPropertyInteger("TimerCostCalculator") * 1000 * 60;
 		$this->SetTimerInterval("CalculateCosts",$TimerMin);
-		
-		$archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
 		
 		$vpos = 15;	
 		

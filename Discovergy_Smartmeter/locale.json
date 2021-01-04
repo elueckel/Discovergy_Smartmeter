@@ -50,6 +50,7 @@
 			"Method to calculate cost": "Methode der Kostenkalkulation",
 			"Tibber API Key": "Tibber API Schlüssel",
 			"Use aWATTar Tarif":"Verwende aWATTar Preis",
+			"The price per kWh for aWATTar is automatically updated. The base price can be adjusted if needed.":"Der Preis pro kWh wird automatisch aktualisiert. Falls sich der Basispreis ändert, kann er hier angepasst werden.",
 			"aWATTar Base Price": "aWATTar Basispreis",
 			"If aWATTar tarif is enabled, the cost will automatically be updated hourly": "Wenn aWATTar Tarif aktiviert ist, wird dieser automatisch jede Stunde aktualisiert",
 			"Main Energy (HT)": "Hauptzeit Tarif (HT)",
