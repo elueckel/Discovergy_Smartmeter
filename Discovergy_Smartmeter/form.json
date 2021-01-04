@@ -85,7 +85,7 @@
 					"items": [
 						{
 							"type": "Label",
-							"label": "aWATTAR Settings"
+							"label": "The price per kWh for aWATTar is automatically updated. The base price can be adjusted if needed."
 						},
 						{
 							"type": "RowLayout",
