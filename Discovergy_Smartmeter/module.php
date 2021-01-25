@@ -159,9 +159,9 @@ if (!defined('vtBoolean')) {
 						$this->RegisterVariableFloat("energy", $this->Translate('Energy Bought'), "DSM.WattK");
 						$this->RegisterVariableFloat("energyout", $this->Translate('Energy Sold'), "DSM.WattK");
 						$this->RegisterVariableFloat("power", $this->Translate('Current Power'), "~Watt.14490");
-						$this->RegisterVariableFloat("phase1", $this->Translate('Phase 1'), "DSM.WattK");
-						$this->RegisterVariableFloat("phase2", $this->Translate('Phase 2'), "DSM.WattK");
-						$this->RegisterVariableFloat("phase3", $this->Translate('Phase 3'), "DSM.WattK");
+						$this->RegisterVariableFloat("phase1", $this->Translate('Phase 1'), "DSM.Watt");
+						$this->RegisterVariableFloat("phase2", $this->Translate('Phase 2'), "DSM.Watt");
+						$this->RegisterVariableFloat("phase3", $this->Translate('Phase 3'), "DSM.Watt");
 						$this->RegisterVariableFloat("voltage1", $this->Translate('Voltage Phase 1'), "~Volt");
 						$this->RegisterVariableFloat("voltage2", $this->Translate('Voltage Phase 2'), "~Volt");
 						$this->RegisterVariableFloat("voltage3", $this->Translate('Voltage Phase 3'), "~Volt");
@@ -364,35 +364,83 @@ if (!defined('vtBoolean')) {
 				SetValue($this->GetIDForIdent('power'), $power);
 				$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Current Consumption: ').round($power,3)." kW",0);
 
-				$phase1_raw = $data->values->power1;
-				$phase1 = $phase1_raw / 1000;
-				SetValue($this->GetIDForIdent('phase1'), $phase1);
-				$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 1 Consumption: ').round($phase1,3)." kWh",0);
+				if (isset ($data->values->power1)) {
+					$phase1_raw = $data->values->power1;
+					$phase1 = $phase1_raw / 1000;
+					SetValue($this->GetIDForIdent('phase1'), $phase1);
+					$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 1 Consumption: ').round($phase1,3)." W",0);
+				}
+				else if (isset ($data->values->phase1Power)) {
+					$phase1_raw = $data->values->phase1Power;
+					$phase1 = $phase1_raw / 1000;
+					SetValue($this->GetIDForIdent('phase1'), $phase1);
+					$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 1 Consumption: ').round($phase1,3)." W",0);
+				}
 
-				$phase2_raw = $data->values->power2;
-				$phase2 = $phase2_raw / 1000;
-				SetValue($this->GetIDForIdent('phase2'), $phase2);
-				$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 2 Consumption: ').round($phase2,3)." kWh",0);
+				if (isset ($data->values->power2)) {
+					$phase2_raw = $data->values->power2;
+					$phase2 = $phase1_raw / 1000;
+					SetValue($this->GetIDForIdent('phase2'), $phase2);
+					$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 2 Consumption: ').round($phase2,3)." W",0);
+				}
+				else if (isset ($data->values->phase2Power)) {
+					$phase2_raw = $data->values->phase2Power;
+					$phase2 = $phase2_raw / 1000;
+					SetValue($this->GetIDForIdent('phase2'), $phase2);
+					$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 2 Consumption: ').round($phase2,3)." W",0);
+				}
 
-				$phase3_raw = $data->values->power3;
-				$phase3 = $phase3_raw / 1000;
-				SetValue($this->GetIDForIdent('phase3'), $phase3);
-				$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 3 Consumption: ').round($phase3,3)." kWh",0);
+				if (isset ($data->values->power3)) {
+					$phase3_raw = $data->values->power3;
+					$phase3 = $phase3_raw / 1000;
+					SetValue($this->GetIDForIdent('phase3'), $phase3);
+					$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 3 Consumption: ').round($phase3,3)." W",0);
+				}
+				else if (isset ($data->values->phase3Power)) {
+					$phase3_raw = $data->values->phase3Power;
+					$phase3 = $phase3_raw / 1000;
+					SetValue($this->GetIDForIdent('phase3'), $phase3);
+					$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 3 Consumption: ').round($phase3,3)." W",0);
+				}
 
-				$voltage1_raw = $data->values->voltage1;
-				$voltage1 = $voltage1_raw / 1000;
-				SetValue($this->GetIDForIdent('voltage1'), $voltage1);
-				$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 1 Voltage: ').round($voltage1,3)." V",0);
+				if (isset ($data->values->voltage1)) {
+					$voltage1_raw = $data->values->voltage1;
+					$voltage1 = $voltage1_raw / 1000;
+					SetValue($this->GetIDForIdent('voltage1'), $voltage1);
+					$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 1 Voltage: ').round($voltage1,3)." V",0);
+				}
+				else if (isset ($data->values->phase1Voltage)) {
+					$voltage1_raw = $data->values->phase1Voltage;
+					$voltage1 = $voltage1_raw / 1000;
+					SetValue($this->GetIDForIdent('voltage1'), $voltage1);
+					$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 1 Voltage: ').round($voltage1,3)." V",0);
+				}
 
-				$voltage2_raw = $data->values->voltage2;
-				$voltage2 = $voltage2_raw / 1000;
-				SetValue($this->GetIDForIdent('voltage2'), $voltage2);
-				$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 2 Voltage: ').round($voltage2,3)." V",0);
+				if (isset ($data->values->voltage2)) {
+					$voltage2_raw = $data->values->voltage2;
+					$voltage2 = $voltage2_raw / 1000;
+					SetValue($this->GetIDForIdent('voltage2'), $voltage2);
+					$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 2 Voltage: ').round($voltage2,3)." V",0);
+				}
+				else if (isset ($data->values->phase2Voltage)) {
+					$voltage2_raw = $data->values->phase2Voltage;
+					$voltage2 = $voltage2_raw / 1000;
+					SetValue($this->GetIDForIdent('voltage2'), $voltage2);
+					$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 2 Voltage: ').round($voltage2,3)." V",0);
+				}
 
-				$voltage3_raw = $data->values->voltage3;
-				$voltage3 = $voltage3_raw / 1000;
-				SetValue($this->GetIDForIdent('voltage3'), $voltage3);
-				$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 3 Voltage: ').round($voltage3,3)." V",0);
+				if (isset ($data->values->voltage3)) {
+					$voltage3_raw = $data->values->voltage3;
+					$voltage3 = $voltage3_raw / 1000;
+					SetValue($this->GetIDForIdent('voltage3'), $voltage3);
+					$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 3 Voltage: ').round($voltage3,3)." V",0);
+				}
+				else if (isset ($data->values->phase3Voltage)) {
+					$voltage3_raw = $data->values->phase3Voltage;
+					$voltage3 = $voltage3_raw / 1000;
+					SetValue($this->GetIDForIdent('voltage3'), $voltage3);
+					$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 3 Voltage: ').round($voltage3,3)." V",0);
+				}
 				
 			}
 

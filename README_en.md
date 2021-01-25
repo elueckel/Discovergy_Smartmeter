@@ -47,4 +47,8 @@ In general different meters provide different data points. Please also check the
 * Updated config UI
 * Hopefully now Module store compliant while still enabling automatic archiving
 
+## Version 2.11 (25.01.2021)
+* Added support for another ESY Meter (Voltage and Power had not been displayed)
+* Localization fixes
+
 For other unsupported meters, please post a message into the forum: https://www.symcon.de/forum/threads/43805-Modul-Discovergy-Smartmeter-die-zweite-f%C3%BCr-Module-Store?highlight=smartmeter
