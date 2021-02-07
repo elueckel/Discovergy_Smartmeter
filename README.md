@@ -38,4 +38,8 @@ Daten Einspeisezähler:
 * Update Konfigurations UI
 * Hoffentlich jetzt kompatibel mit dem Module Store obwohl die Archivierung immer noch automatisch aktivert wird
 
+## Version 2.11 (25.01.2021)
+* Erweiterung für weitere ESY Zähler (vorheriger Fehler es wurde Spannung und Leistung der Phasen nicht angezeigt)
+* Lokalisierungsupdate
+
 Sollten weitere Zähler benötigt werden bitte im Forum https://www.symcon.de/forum/threads/43805-Modul-Discovergy-Smartmeter-die-zweite-f%C3%BCr-Module-Store  posten. Für den Einbau benötige ich 'manufacturerId' und evtl. ein Beispiel JSON. Bitte melden.
