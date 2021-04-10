@@ -42,4 +42,7 @@ Daten Einspeisezähler:
 * Erweiterung für weitere ESY Zähler (vorheriger Fehler es wurde Spannung und Leistung der Phasen nicht angezeigt)
 * Lokalisierungsupdate
 
+## Version 2.12 (10.04.2021)
+* Fix Phase 2 Leistung wurde falsch ausgewertet
+
 Sollten weitere Zähler benötigt werden bitte im Forum https://www.symcon.de/forum/threads/43805-Modul-Discovergy-Smartmeter-die-zweite-f%C3%BCr-Module-Store  posten. Für den Einbau benötige ich 'manufacturerId' und evtl. ein Beispiel JSON. Bitte melden.
