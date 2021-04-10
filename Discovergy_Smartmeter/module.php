@@ -379,7 +379,7 @@ if (!defined('vtBoolean')) {
 
 				if (isset ($data->values->power2)) {
 					$phase2_raw = $data->values->power2;
-					$phase2 = $phase1_raw / 1000;
+					$phase2 = $phase2_raw / 1000;
 					SetValue($this->GetIDForIdent('phase2'), $phase2);
 					$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 2 Consumption: ').round($phase2,3)." W",0);
 				}
