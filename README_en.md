@@ -51,4 +51,7 @@ In general different meters provide different data points. Please also check the
 * Added support for another ESY Meter (Voltage and Power had not been displayed)
 * Localization fixes
 
+## Version 2.12 (10.04.2021)
+* Fix Phase 2 Power was wrongly calculated
+
 For other unsupported meters, please post a message into the forum: https://www.symcon.de/forum/threads/43805-Modul-Discovergy-Smartmeter-die-zweite-f%C3%BCr-Module-Store?highlight=smartmeter
