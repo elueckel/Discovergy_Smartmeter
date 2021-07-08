@@ -558,32 +558,37 @@ if (!defined('vtBoolean')) {
 
 				$json = curl_exec($curl);
 				$data = json_decode($json);
+				
+				if ($Current != "") { 
 
-				$current = $data->data->viewer->homes[0];
-				/*
-				$total = $current->currentSubscription->priceInfo->current->total;
-				var_dump($total);
+					$current = $data->data->viewer->homes[0];
+					/*
+					$total = $current->currentSubscription->priceInfo->current->total;
+					var_dump($total);
 
-				$energy = $current->currentSubscription->priceInfo->current->energy;
-				var_dump($energy);
+					$energy = $current->currentSubscription->priceInfo->current->energy;
+					var_dump($energy);
 
-				$tax = $current->currentSubscription->priceInfo->current->tax;
-				var_dump($tax); 
-				*/
+					$tax = $current->currentSubscription->priceInfo->current->tax;
+					var_dump($tax); 
+					*/
 
 				
-				$CurrentPricekwh = $current->currentSubscription->priceInfo->current->total;
-				$this->SendDebug($this->Translate('Tibber'),$this->Translate('Current cost per kWh: ').$CurrentPricekwh,0);
-				If ($CostCalculationMethod == 3) {
-					SetValue($this->GetIDForIdent('CostEnergykWh'), $CurrentPricekwh);
+					$CurrentPricekwh = $current->currentSubscription->priceInfo->current->total;
+					$this->SendDebug($this->Translate('Tibber'),$this->Translate('Current cost per kWh: ').$CurrentPricekwh,0);
+					If ($CostCalculationMethod == 3) {
+						SetValue($this->GetIDForIdent('CostEnergykWh'), $CurrentPricekwh);
+					}
+					
 				}
+				
 			}
 
 			Else {
 				$this->SendDebug($this->Translate('Tibber'),$this->Translate('API is empty - please set YOUR Api Key for Tibber'),0);
 				echo 'API is empty - please set YOUR Api Key for Tibber';
 			}
-
+			
 		}
 
 		
