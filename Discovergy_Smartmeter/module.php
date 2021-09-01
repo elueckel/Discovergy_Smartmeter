@@ -559,7 +559,7 @@ if (!defined('vtBoolean')) {
 				$json = curl_exec($curl);
 				$data = json_decode($json);
 				
-				if (isset($Current)) { 
+				if (isset($data)) { 
 
 					$current = $data->data->viewer->homes[0];
 					/*
