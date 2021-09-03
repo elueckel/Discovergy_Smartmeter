@@ -252,63 +252,61 @@ if (!defined('vtBoolean')) {
 		$ConsumptionSecondary = $this->ReadPropertyBoolean("ConsumptionSecondary");
 		$EarningsCalculation = $this->ReadPropertyBoolean("EarningsCalculation");
 		$ConsumptionGas = $this->ReadPropertyBoolean("ConsumptionGas");
+	
+		if ($manufacturerId == "ESY") {
 
-		If ($CostCalculationMethod > 0) {
-		
-			if ($manufacturerId == "ESY") {
-			
-				if ($ConsumptionMain == true) {
-					$energyID = $this->GetIDForIdent('energy');
-					$CalculatedCostID = $this->GetIDForIdent('CalculatedCost');
-					AC_SetLoggingStatus($archiveID, $energyID, true);
-					AC_SetAggregationType($archiveID, $energyID, 1);
-					AC_SetLoggingStatus($archiveID, $CalculatedCostID, true);
-					AC_SetAggregationType($archiveID, $CalculatedCostID, 1);
-					IPS_ApplyChanges($archiveID);
-				}
-				if ($EarningsCalculation == true) {
-					$energyoutID = $this->GetIDForIdent('energyout');
-					$CalculatedEarningsID = $this->GetIDForIdent('CalculatedEarnings');
-					AC_SetLoggingStatus($archiveID, $energyoutID, true);
-					AC_SetAggregationType($archiveID, $energyoutID, 1);
-					AC_SetLoggingStatus($archiveID, $CalculatedEarningsID, true);
-					AC_SetAggregationType($archiveID, $CalculatedEarningsID, 1);
-					IPS_ApplyChanges($archiveID);
-				}
-			}	
-
-			else if ($manufacturerId == "EMH") {
-				
-				if ($ConsumptionMain == true) {
-					$effective_power_mainID = $this->GetIDForIdent('effective_power_main');
-					$CalculatedCostID = $this->GetIDForIdent('CalculatedCost');
-					AC_SetLoggingStatus($archiveID, $effective_power_mainID, true);
-					AC_SetAggregationType($archiveID, $effective_power_mainID, 1);
-					AC_SetLoggingStatus($archiveID, $CalculatedCostID, true);
-					AC_SetAggregationType($archiveID, $CalculatedCostID, 1);
-					IPS_ApplyChanges($archiveID);
-				}
-
-				if ($ConsumptionSecondary == true) {
-					$effective_power_secondaryID = $this->GetIDForIdent('effective_power_secondary');
-					$CalculatedCostSecondaryID = $this->GetIDForIdent('CalculatedCostSecondary');
-					AC_SetLoggingStatus($archiveID, $effective_power_secondaryID, true);
-					AC_SetAggregationType($archiveID, $effective_power_secondaryID, 1);
-					AC_SetLoggingStatus($archiveID, $CalculatedCostSecondaryID, true);
-					AC_SetAggregationType($archiveID, $CalculatedCostSecondaryID, 1);
-					IPS_ApplyChanges($archiveID);
-				}
-				if ($EarningsCalculation == true) {
-					$sold_power_mainID = $this->GetIDForIdent('sold_power_main');
-					$CalculatedEarningsID = $this->GetIDForIdent('CalculatedEarnings');
-					AC_SetLoggingStatus($archiveID, $sold_power_mainID, true);
-					AC_SetAggregationType($archiveID, $sold_power_mainID, 1);
-					AC_SetLoggingStatus($archiveID, $CalculatedEarningsID, true);
-					AC_SetAggregationType($archiveID, $CalculatedEarningsID, 1);
-					IPS_ApplyChanges($archiveID);
-				}					
+			if ($ConsumptionMain == true) {
+				$energyID = $this->GetIDForIdent('energy');
+				$CalculatedCostID = $this->GetIDForIdent('CalculatedCost');
+				AC_SetLoggingStatus($archiveID, $energyID, true);
+				AC_SetAggregationType($archiveID, $energyID, 1);
+				AC_SetLoggingStatus($archiveID, $CalculatedCostID, true);
+				AC_SetAggregationType($archiveID, $CalculatedCostID, 1);
+				IPS_ApplyChanges($archiveID);
 			}
+			if ($EarningsCalculation == true) {
+				$energyoutID = $this->GetIDForIdent('energyout');
+				$CalculatedEarningsID = $this->GetIDForIdent('CalculatedEarnings');
+				AC_SetLoggingStatus($archiveID, $energyoutID, true);
+				AC_SetAggregationType($archiveID, $energyoutID, 1);
+				AC_SetLoggingStatus($archiveID, $CalculatedEarningsID, true);
+				AC_SetAggregationType($archiveID, $CalculatedEarningsID, 1);
+				IPS_ApplyChanges($archiveID);
+			}
+		}	
+
+		else if ($manufacturerId == "EMH") {
+
+			if ($ConsumptionMain == true) {
+				$effective_power_mainID = $this->GetIDForIdent('effective_power_main');
+				$CalculatedCostID = $this->GetIDForIdent('CalculatedCost');
+				AC_SetLoggingStatus($archiveID, $effective_power_mainID, true);
+				AC_SetAggregationType($archiveID, $effective_power_mainID, 1);
+				AC_SetLoggingStatus($archiveID, $CalculatedCostID, true);
+				AC_SetAggregationType($archiveID, $CalculatedCostID, 1);
+				IPS_ApplyChanges($archiveID);
+			}
+
+			if ($ConsumptionSecondary == true) {
+				$effective_power_secondaryID = $this->GetIDForIdent('effective_power_secondary');
+				$CalculatedCostSecondaryID = $this->GetIDForIdent('CalculatedCostSecondary');
+				AC_SetLoggingStatus($archiveID, $effective_power_secondaryID, true);
+				AC_SetAggregationType($archiveID, $effective_power_secondaryID, 1);
+				AC_SetLoggingStatus($archiveID, $CalculatedCostSecondaryID, true);
+				AC_SetAggregationType($archiveID, $CalculatedCostSecondaryID, 1);
+				IPS_ApplyChanges($archiveID);
+			}
+			if ($EarningsCalculation == true) {
+				$sold_power_mainID = $this->GetIDForIdent('sold_power_main');
+				$CalculatedEarningsID = $this->GetIDForIdent('CalculatedEarnings');
+				AC_SetLoggingStatus($archiveID, $sold_power_mainID, true);
+				AC_SetAggregationType($archiveID, $sold_power_mainID, 1);
+				AC_SetLoggingStatus($archiveID, $CalculatedEarningsID, true);
+				AC_SetAggregationType($archiveID, $CalculatedEarningsID, 1);
+				IPS_ApplyChanges($archiveID);
+			}					
 		}
+		
 		
 		if ($ConsumptionGas == 1 AND $manufacturerId == "ELS") {
 			$gas_usageID = $this->GetIDForIdent('gas_usageID');
@@ -597,9 +595,7 @@ if (!defined('vtBoolean')) {
 
 	//Future Use 
 	public function QueryTibberCostAhead() {
-
 		
-
 		$json = '{"query":"{viewer {homes {currentSubscription {priceInfo {current {total energy tax startsAt }}}}}}"}';
 
 		$curl = curl_init('https://api.tibber.com/v1-beta/gql');
