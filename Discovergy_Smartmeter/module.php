@@ -93,6 +93,15 @@ if (!defined('vtBoolean')) {
 		$TimerMS = $this->ReadPropertyInteger("TimerQueryMeter") * 1000;
 		$this->SetTimerInterval("GetMeterReading",$TimerMS);
 
+		if (0 == $TimerMS) {
+			// instance inactive
+			$this->SetStatus(104);
+		}
+		else {
+			// instance active
+			$this->SetStatus(102);
+		}
+
 		$TimerMin = $this->ReadPropertyInteger("TimerCostCalculator") * 1000 * 60;
 		$this->SetTimerInterval("CalculateCosts",$TimerMin);
 		
