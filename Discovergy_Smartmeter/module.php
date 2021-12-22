@@ -453,8 +453,7 @@ if (!defined('vtBoolean')) {
 			}
 
 			else if ($manufacturerId == "EMH") {
-        print_r($data);
-        $power_raw = $data->values->power;
+        $power_raw = $data->values->{'9.25'};
         $power = $power_raw / 1000;
         SetValue($this->GetIDForIdent('power'), $power);
 
