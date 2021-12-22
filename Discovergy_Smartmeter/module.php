@@ -11,14 +11,14 @@ if (!defined('vtBoolean')) {
 
 
 	class Discovergy_Smartmeter extends IPSModule
-	
+
 	{
-		
+
 		public function Create()
 		{
 			//Never delete this line!
 			parent::Create();
-			
+
 			//Properties
 
 			$this->RegisterPropertyString("UserName","");
@@ -32,13 +32,13 @@ if (!defined('vtBoolean')) {
 			$this->RegisterPropertyBoolean("ConsumptionSecondary", 0);
 			$this->RegisterPropertyBoolean("Sale", 0);
 			$this->RegisterPropertyString("BasePrice","0.1996");
-			
+
 			$this->RegisterPropertyBoolean("EarningsCalculation",0);
 
 			$this->RegisterPropertyString("TibberAPIKey","");
 
 			$this->RegisterPropertyBoolean("ConsumptionGas", 0);
-			
+
 			$this->RegisterPropertyInteger("TimerCostCalculator", 0);
 
 			$this->RegisterPropertyString("SmartmeterUID","");
@@ -64,7 +64,7 @@ if (!defined('vtBoolean')) {
 				IPS_SetVariableProfileText("DSM.Euro4Digits", "", " €");
 			}
 
-			
+
 
 			if (IPS_VariableProfileExists("DSM.CostCalculationMethod") == false){
 					IPS_CreateVariableProfile("DSM.CostCalculationMethod", 1);
@@ -74,22 +74,22 @@ if (!defined('vtBoolean')) {
 					IPS_SetVariableProfileAssociation("DSM.CostCalculationMethod", 2, $this->Translate('Automatic - aWATTar'), "",-1);
 					IPS_SetVariableProfileAssociation("DSM.CostCalculationMethod", 3, $this->Translate('Automatic - Tibber'), "",-1);
 			}
-			
+
 			//Component sets timer, but default is OFF
 			$this->RegisterTimer("GetMeterReading",0,"DSM_GetMeterReading(\$_IPS['TARGET']);");
 			$this->RegisterTimer("Query Energy Cost Hourly",0,"DSM_QueryEnergyCostHourly(\$_IPS['TARGET']);");
 			$this->RegisterTimer("CalculateCosts",0,"DSM_CalculateCosts(\$_IPS['TARGET']);");
-					
+
 		}
-	
+
 	public function ApplyChanges()
 	{
-			
+
 		//Never delete this line!
 		parent::ApplyChanges();
-								
+
 		//Timers Update - if greater than 0 = On
-		
+
 		$TimerMS = $this->ReadPropertyInteger("TimerQueryMeter") * 1000;
 		$this->SetTimerInterval("GetMeterReading",$TimerMS);
 
@@ -104,9 +104,9 @@ if (!defined('vtBoolean')) {
 
 		$TimerMin = $this->ReadPropertyInteger("TimerCostCalculator") * 1000 * 60;
 		$this->SetTimerInterval("CalculateCosts",$TimerMin);
-		
-		$vpos = 15;	
-		
+
+		$vpos = 15;
+
 		$username = $this->ReadPropertyString("UserName");
 		$password = $this->ReadPropertyString("Password");
 		$SmartmeterUID = $this->ReadPropertyString("SmartmeterUID");
@@ -118,7 +118,7 @@ if (!defined('vtBoolean')) {
 		$ConsumptionGas = $this->ReadPropertyBoolean("ConsumptionGas");
 
 		if (($username !== "") AND ($password !== "") AND ($SmartmeterUID !== "")) {
-			
+
 			$curl = curl_init('https://api.discovergy.com/public/v1/meters');
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
 			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
@@ -162,7 +162,7 @@ if (!defined('vtBoolean')) {
 					$this->RegisterVariableString("meterID", $this->Translate("Meter UID"), "");
 					SetValue($this->GetIDForIdent("meterID"), rtrim($meterid,""));
 					$this->RegisterVariableString("manufacturerId", $this->Translate("Manufacturer ID"), "");
-					SetValue($this->GetIDForIdent("manufacturerId"), $manufacturerId);				
+					SetValue($this->GetIDForIdent("manufacturerId"), $manufacturerId);
 
 					if ($manufacturerId == "ESY") {
 						$this->RegisterVariableFloat("energy", $this->Translate('Energy Bought'), "DSM.WattK");
@@ -185,10 +185,11 @@ if (!defined('vtBoolean')) {
 							$this->RegisterVariableFloat("CalculatedEarnings", $this->Translate('Calculated Earnings'), "~Euro");
 							$energyoutID = $this->GetIDForIdent('energyout');
 							$CalculatedEarningsID = $this->GetIDForIdent('CalculatedEarnings');
-						}			
+						}
 					}
-			
+
 					else if ($manufacturerId == "EMH") {
+            $this->RegisterVariableFloat("power", $this->Translate('Current Power'), "~Watt.14490");
 						$this->RegisterVariableFloat("effective_power_complete", $this->Translate('Effective Power Complete'), "DSM.WattK");
 						$this->RegisterVariableFloat("effective_power_main", $this->Translate('Effective Power Main Time'), "DSM.WattK");
 						$this->RegisterVariableFloat("effective_power_secondary", $this->Translate('Effective Power Secondary Time'), "DSM.WattK");
@@ -211,8 +212,8 @@ if (!defined('vtBoolean')) {
 							$this->RegisterVariableFloat("CalculatedEarnings", $this->Translate('Calculated Earnings'), "~Euro");
 							$sold_power_mainID = $this->GetIDForIdent('sold_power_main');
 							$CalculatedEarningsID = $this->GetIDForIdent('CalculatedEarnings');
-						}					
-					}	
+						}
+					}
 
 					else if ($manufacturerId == "ELS") {
 						$this->RegisterVariableFloat("gas_usage", $this->Translate('Gas Usage'), "~Gas");
@@ -227,10 +228,10 @@ if (!defined('vtBoolean')) {
 			}
 
 		}
-		
-		//Set hourly timer to get aWATTar or Tibber data 
 
-		
+		//Set hourly timer to get aWATTar or Tibber data
+
+
 
 		if ($CostCalculationMethod > 1) {
 			$this->QueryEnergyCostHourly(); // get current data
@@ -249,7 +250,7 @@ if (!defined('vtBoolean')) {
 		else if ($CostCalculationMethod < 2) {
 			$this->SetTimerInterval("Query Energy Cost Hourly",0);
 		}
-			
+
 	}
 
 	public function TurnArchivingOn() {
@@ -261,7 +262,7 @@ if (!defined('vtBoolean')) {
 		$ConsumptionSecondary = $this->ReadPropertyBoolean("ConsumptionSecondary");
 		$EarningsCalculation = $this->ReadPropertyBoolean("EarningsCalculation");
 		$ConsumptionGas = $this->ReadPropertyBoolean("ConsumptionGas");
-	
+
 		if ($manufacturerId == "ESY") {
 
 			if ($ConsumptionMain == true) {
@@ -282,7 +283,7 @@ if (!defined('vtBoolean')) {
 				AC_SetAggregationType($archiveID, $CalculatedEarningsID, 1);
 				IPS_ApplyChanges($archiveID);
 			}
-		}	
+		}
 
 		else if ($manufacturerId == "EMH") {
 
@@ -313,10 +314,10 @@ if (!defined('vtBoolean')) {
 				AC_SetLoggingStatus($archiveID, $CalculatedEarningsID, true);
 				AC_SetAggregationType($archiveID, $CalculatedEarningsID, 1);
 				IPS_ApplyChanges($archiveID);
-			}					
+			}
 		}
-		
-		
+
+
 		if ($ConsumptionGas == 1 AND $manufacturerId == "ELS") {
 			$gas_usageID = $this->GetIDForIdent('gas_usageID');
 			$CalculatedCostID = $this->GetIDForIdent('CalculatedCost');
@@ -329,12 +330,12 @@ if (!defined('vtBoolean')) {
 
 	}
 
-		
+
 	public function GetMeterReading() {
 
 		$username = $this->ReadPropertyString("UserName");
 		$password = $this->ReadPropertyString("Password");
-		
+
 		$meterid = GetValue($this->GetIDForIdent('meterID'));
 		$manufacturerId = GetValue($this->GetIDForIdent('manufacturerId'));
 
@@ -353,7 +354,7 @@ if (!defined('vtBoolean')) {
 		$data = json_decode($json);
 
 		if ($data != NULL) {
-			
+
 			if ($manufacturerId == "ESY") {
 				$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('*********************************************************************'),0);
 				$energy_raw = $data->values->energy;
@@ -448,10 +449,16 @@ if (!defined('vtBoolean')) {
 					SetValue($this->GetIDForIdent('voltage3'), $voltage3);
 					$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('Phase 3 Voltage: ').round($voltage3,3)." V",0);
 				}
-				
+
 			}
 
 			else if ($manufacturerId == "EMH") {
+
+        $power_raw = $data->values->power;
+        $power = $power_raw / 1000;
+        SetValue($this->GetIDForIdent('power'), $power);
+
+        
 				$this->SendDebug($this->Translate('EMH Meter'),$this->Translate('*********************************************************************'),0);
 				$effective_power_complete_raw = $data->values->{'1.8.0'};
 				$effective_power_complete = $effective_power_complete_raw / 1000000;
@@ -488,15 +495,15 @@ if (!defined('vtBoolean')) {
 				SetValue($this->GetIDForIdent('current_power'), $current_power);
 				*/
 			}
-			
+
 			else if ($manufacturerId == "ELS") {
-				
+
 				$gas_raw = $data->values->volume;
 				$gas_usage = $gas_raw / 1000;
 				SetValue($this->GetIDForIdent('gas_usage'), $gas_usage);
 				$this->SendDebug($this->Translate('GAS Meter'),$this->Translate('*********************************************************************'),0);
 				$this->SendDebug($this->Translate('GAS Meter'),$this->Translate('Gas Consumed: ').round($gas_usage,3)." m3",0);
-					
+
 			}
 		}
 		else {
@@ -515,7 +522,7 @@ if (!defined('vtBoolean')) {
 
 		else if ($CostCalculationMethod == 2) {
 			$BasePrice = $this->ReadPropertyString("BasePrice");
-			
+
 			$curl = curl_init('https://api-test.awattar.de/v1/optimizer');
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
 			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
@@ -555,8 +562,8 @@ if (!defined('vtBoolean')) {
 				curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 				curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
 				curl_setopt($curl, CURLOPT_TIMEOUT, 5);
-				curl_setopt($curl, CURLOPT_HTTPHEADER, 
-				array('Content-Type: application/json',  
+				curl_setopt($curl, CURLOPT_HTTPHEADER,
+				array('Content-Type: application/json',
 				'Authorization: Bearer '.$TibberAPIKey)); // Demo token
 				curl_setopt($curl, CURLOPT_POST, true);
 				curl_setopt($curl, CURLOPT_POSTFIELDS, $json);
@@ -565,8 +572,8 @@ if (!defined('vtBoolean')) {
 
 				$json = curl_exec($curl);
 				$data = json_decode($json);
-				
-				if (isset($data)) { 
+
+				if (isset($data)) {
 
 					$current = $data->data->viewer->homes[0];
 					/*
@@ -577,34 +584,34 @@ if (!defined('vtBoolean')) {
 					var_dump($energy);
 
 					$tax = $current->currentSubscription->priceInfo->current->tax;
-					var_dump($tax); 
+					var_dump($tax);
 					*/
 
-				
+
 					$CurrentPricekwh = $current->currentSubscription->priceInfo->current->total;
 					$this->SendDebug($this->Translate('Tibber'),$this->Translate('Current cost per kWh: ').$CurrentPricekwh,0);
 					If ($CostCalculationMethod == 3) {
 						SetValue($this->GetIDForIdent('CostEnergykWh'), $CurrentPricekwh);
 					}
-					
+
 				}
-				
+
 			}
 
 			Else {
 				$this->SendDebug($this->Translate('Tibber'),$this->Translate('API is empty - please set YOUR Api Key for Tibber'),0);
 				echo 'API is empty - please set YOUR Api Key for Tibber';
 			}
-			
+
 		}
 
-		
+
 
 	}
 
-	//Future Use 
+	//Future Use
 	public function QueryTibberCostAhead() {
-		
+
 		$json = '{"query":"{viewer {homes {currentSubscription {priceInfo {current {total energy tax startsAt }}}}}}"}';
 
 		$curl = curl_init('https://api.tibber.com/v1-beta/gql');
@@ -612,8 +619,8 @@ if (!defined('vtBoolean')) {
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
 		curl_setopt($curl, CURLOPT_TIMEOUT, 5);
-		curl_setopt($curl, CURLOPT_HTTPHEADER, 
-		array('Content-Type: application/json',  
+		curl_setopt($curl, CURLOPT_HTTPHEADER,
+		array('Content-Type: application/json',
 		'Authorization: Bearer d1007ead2dc84a2b82f0de19451c5fb22112f7ae11d19bf2bedb224a003ff74a')); // Demo token
 		curl_setopt($curl, CURLOPT_POST, true);
 		curl_setopt($curl, CURLOPT_POSTFIELDS, $json);
@@ -632,10 +639,10 @@ if (!defined('vtBoolean')) {
 		var_dump($energy);
 
 		$tax = $current->currentSubscription->priceInfo->current->tax;
-		var_dump($tax); 
+		var_dump($tax);
 		*/
 
-		
+
 		$CurrentPricekwh = $current->currentSubscription->priceInfo->current->total[0];
 		$this->SendDebug($this->Translate('Tibber'),$this->Translate('Current cost per kWh: ').$CurrentPricekwh,0);
 
@@ -649,11 +656,11 @@ if (!defined('vtBoolean')) {
 	}
 
 	public function CalculateCosts() {
-		
+
 		$manufacturerId = GetValue($this->GetIDForIdent('manufacturerId'));
 		$CostCalculatorInterval = $this->ReadPropertyInteger("TimerCostCalculator");
 
-		SetValue($this->GetIDForIdent('CostCalculationMethod'),$this->ReadPropertyInteger("CostCalculationMethod")); 
+		SetValue($this->GetIDForIdent('CostCalculationMethod'),$this->ReadPropertyInteger("CostCalculationMethod"));
 
 		if ($manufacturerId == "ESY") {
 
@@ -687,8 +694,8 @@ if (!defined('vtBoolean')) {
 				$this->SendDebug($this->Translate('Cost Calculation'),$this->Translate('Current cost per kWh: ').round($CostEnergykWh, 3)." €".$this->Translate(' / Calculated Cost: ').round($kosten, 3)." €",0);
 			}
 
-			// Caculate Feed-In Revenue 
-			
+			// Caculate Feed-In Revenue
+
 			$EarningsCalculation = $this->ReadPropertyBoolean("EarningsCalculation");
 
 			if ($EarningsCalculation == 1) {
@@ -760,10 +767,10 @@ if (!defined('vtBoolean')) {
 				SetValue($this->GetIDForIdent('CalculatedCost'), 0);
 			}
 
-			// Caculate Feed-In Revenue 
-			
+			// Caculate Feed-In Revenue
+
 			$ConsumptionSecondary = $this->ReadPropertyBoolean("ConsumptionSecondary");
-			
+
 			if ($ConsumptionSecondary == 1) {
 				$CostCalculatorInterval = $this->ReadPropertyInteger("TimerCostCalculator");
 				$CostEnergykWhSecondary = GetValue($this->GetIDForIdent('CostEnergykWhSecondary'));
@@ -774,16 +781,16 @@ if (!defined('vtBoolean')) {
 
 				$werte = AC_GetLoggedValues($archiveID, $Energy, strtotime("-".$CostCalculatorInterval." minutes"), time(), 0);
 				//var_dump($werte);
-	
+
 				$letzter = array_pop($werte);
 				//echo $letzter["Value"];
-	
+
 				$array_count = count($werte);
-	
+
 				if ($array_count > 0) {
 					$first = $werte["0"]["Value"];
 					//echo "echo ".$first;
-	
+
 					$wert = array_pop($werte);
 					$last = $wert["Value"];
 					//echo " last ".$last;
@@ -872,14 +879,14 @@ if (!defined('vtBoolean')) {
 
 
 	public function GetMeters() {
-		$vpos = 15;			
-		
+		$vpos = 15;
+
 
 		$username = $this->ReadPropertyString("UserName");
 		$password = $this->ReadPropertyString("Password");
 
 		if (($username !== "") AND ($password !== "")) {
-			
+
 			$curl = curl_init('https://api.discovergy.com/public/v1/meters');
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
 			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
@@ -903,11 +910,11 @@ if (!defined('vtBoolean')) {
 
 				$meterid = $meter->meterId;
 				$manufacturerId = $meter->manufacturerId;
-				
+
 				echo "UID ".trim($meterid)." Type ".$manufacturerId." // ";
-				
+
 			}
-		}	
+		}
 	}
-		
+
 }
