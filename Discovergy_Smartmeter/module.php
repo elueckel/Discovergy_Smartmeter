@@ -453,12 +453,12 @@ if (!defined('vtBoolean')) {
 			}
 
 			else if ($manufacturerId == "EMH") {
-
+        print_r($data);
         $power_raw = $data->values->power;
         $power = $power_raw / 1000;
         SetValue($this->GetIDForIdent('power'), $power);
 
-        
+
 				$this->SendDebug($this->Translate('EMH Meter'),$this->Translate('*********************************************************************'),0);
 				$effective_power_complete_raw = $data->values->{'1.8.0'};
 				$effective_power_complete = $effective_power_complete_raw / 1000000;
