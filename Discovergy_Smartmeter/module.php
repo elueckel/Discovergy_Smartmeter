@@ -119,6 +119,26 @@ if (!defined('vtBoolean')) {
 
 		if (($username !== "") AND ($password !== "") AND ($SmartmeterUID !== "")) {
 			
+			$curl = curl_init('https://api.discovergy.com/public/v1/field_names?meterId='.$meterid);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+			curl_setopt($curl, CURLOPT_TIMEOUT, 5);
+			curl_setopt($curl, CURLOPT_USERPWD, "$username:$password");
+			curl_setopt($curl, CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
+
+			$json_field_names = curl_exec($curl);
+			$field_names = json_decode($json_field_names);
+
+			if (in_array("energy", $field_names)) {
+				$Meter_Field_Names = "Non-Obis";
+			}	
+			else if (in_array("1.8.0", $field_names)) {
+				$Meter_Field_Names = "Obis";
+			}
+
+
+
 			$curl = curl_init('https://api.discovergy.com/public/v1/meters');
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
 			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
@@ -162,7 +182,12 @@ if (!defined('vtBoolean')) {
 					$this->RegisterVariableString("meterID", $this->Translate("Meter UID"), "");
 					SetValue($this->GetIDForIdent("meterID"), rtrim($meterid,""));
 					$this->RegisterVariableString("manufacturerId", $this->Translate("Manufacturer ID"), "");
-					SetValue($this->GetIDForIdent("manufacturerId"), $manufacturerId);				
+					SetValue($this->GetIDForIdent("manufacturerId"), $manufacturerId);
+
+					$this->RegisterVariableString("meter_field_names", $this->Translate("Meter Field Names"), "");
+					SetValue($this->GetIDForIdent("meter_field_names"), $meter_field_names);	
+					$this->RegisterVariableString("meter_scaling_factor", $this->Translate("Meter Scaling Factor"), "");
+					SetValue($this->GetIDForIdent("meter_scaling_factor"), $meter_scaling_factor);					
 
 					if ($manufacturerId == "ESY") {
 						$this->RegisterVariableFloat("energy", $this->Translate('Energy Bought'), "DSM.WattK");
