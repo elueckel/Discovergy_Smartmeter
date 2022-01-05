@@ -118,7 +118,7 @@ if (!defined('vtBoolean')) {
 		$ConsumptionGas = $this->ReadPropertyBoolean("ConsumptionGas");
 
 		if (($username !== "") AND ($password !== "") AND ($SmartmeterUID !== "")) {
-			
+
 			$curl = curl_init('https://api.discovergy.com/public/v1/meters');
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
 			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
@@ -152,6 +152,32 @@ if (!defined('vtBoolean')) {
 					$locationCity = $meter->location->city;
 					$locationCountry = $meter->location->country;
 					$meterlocation = $locationStreet." ".$locationStreetNumber." ".$locationzip." ".$locationCity." ".$locationCountry;
+					$scalingFactor = $meter->scalingFactor;
+
+					$curl = curl_init('https://api.discovergy.com/public/v1/field_names?meterId='.$meterid);
+					curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+					curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+					curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+					curl_setopt($curl, CURLOPT_TIMEOUT, 5);
+					curl_setopt($curl, CURLOPT_USERPWD, "$username:$password");
+					curl_setopt($curl, CURLOPT_USERAGENT,'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
+
+					$json_field_names = curl_exec($curl);
+					$field_names_json = json_decode($json_field_names,true);
+					//var_dump($field_names_json);
+					
+					if ($field_names_json[0] == "energy") {
+						$Meter_Field_Names = "NON-OBIS";
+						$this->SendDebug($this->Translate('Smartmeter Setup'),$this->Translate('Meter identified as NON-OBIS Meter'),0);
+					}
+					elseif ($field_names_json[0] == "1.25") {
+						$Meter_Field_Names = "OBIS";
+						$this->SendDebug($this->Translate('Smartmeter Setup'),$this->Translate('Meter identified as OBIS Meter'),0);
+					}
+					elseif ($field_names_json[0] == "volume") {
+						$Meter_Field_Names = "GAS";
+						$this->SendDebug($this->Translate('Smartmeter Setup'),$this->Translate('Meter identified as GAS Meter'),0);
+					}	
 
 					$this->RegisterVariableString("meterlocation", $this->Translate("Meter Location"), "");
 					SetValue($this->GetIDForIdent("meterlocation"), $meterlocation);
@@ -162,9 +188,15 @@ if (!defined('vtBoolean')) {
 					$this->RegisterVariableString("meterID", $this->Translate("Meter UID"), "");
 					SetValue($this->GetIDForIdent("meterID"), rtrim($meterid,""));
 					$this->RegisterVariableString("manufacturerId", $this->Translate("Manufacturer ID"), "");
-					SetValue($this->GetIDForIdent("manufacturerId"), $manufacturerId);				
+					SetValue($this->GetIDForIdent("manufacturerId"), $manufacturerId);
 
-					if ($manufacturerId == "ESY") {
+					$this->RegisterVariableString("meter_field_names", $this->Translate("Meter Field Names"), "");
+					SetValue($this->GetIDForIdent("meter_field_names"), $Meter_Field_Names);	
+					$this->RegisterVariableInteger("meter_scaling_factor", $this->Translate("Meter Scaling Factor"), "");
+					SetValue($this->GetIDForIdent("meter_scaling_factor"), $scalingFactor);					
+
+					//if ($manufacturerId == "ESY") {
+					if ($Meter_Field_Names == "NON-OBIS") {
 						$this->RegisterVariableFloat("energy", $this->Translate('Energy Bought'), "DSM.WattK");
 						$this->RegisterVariableFloat("energyout", $this->Translate('Energy Sold'), "DSM.WattK");
 						$this->RegisterVariableFloat("power", $this->Translate('Current Power'), "~Watt.14490");
@@ -188,7 +220,8 @@ if (!defined('vtBoolean')) {
 						}			
 					}
 			
-					else if ($manufacturerId == "EMH") {
+					else if ($Meter_Field_Names == "OBIS") {
+						$this->RegisterVariableFloat("current_power", $this->Translate('Current Power'), "DSM.Watt");
 						$this->RegisterVariableFloat("effective_power_complete", $this->Translate('Effective Power Complete'), "DSM.WattK");
 						$this->RegisterVariableFloat("effective_power_main", $this->Translate('Effective Power Main Time'), "DSM.WattK");
 						$this->RegisterVariableFloat("effective_power_secondary", $this->Translate('Effective Power Secondary Time'), "DSM.WattK");
@@ -214,7 +247,7 @@ if (!defined('vtBoolean')) {
 						}					
 					}	
 
-					else if ($manufacturerId == "ELS") {
+					else if ($Meter_Field_Names == "GAS") {
 						$this->RegisterVariableFloat("gas_usage", $this->Translate('Gas Usage'), "~Gas");
 						if ($ConsumptionGas == true) {
 							$this->RegisterVariableFloat("CostEnergym3", $this->Translate('Cost per m3'), "~Euro");
@@ -261,8 +294,10 @@ if (!defined('vtBoolean')) {
 		$ConsumptionSecondary = $this->ReadPropertyBoolean("ConsumptionSecondary");
 		$EarningsCalculation = $this->ReadPropertyBoolean("EarningsCalculation");
 		$ConsumptionGas = $this->ReadPropertyBoolean("ConsumptionGas");
+		$Meter_Field_Names = GetValue($this->GetIDForIdent("meter_field_names"));
 	
-		if ($manufacturerId == "ESY") {
+		//if ($manufacturerId == "ESY") {
+		if ($Meter_Field_Names == "NON-OBIS") {
 
 			if ($ConsumptionMain == true) {
 				$energyID = $this->GetIDForIdent('energy');
@@ -283,8 +318,7 @@ if (!defined('vtBoolean')) {
 				IPS_ApplyChanges($archiveID);
 			}
 		}	
-
-		else if ($manufacturerId == "EMH") {
+		else if ($Meter_Field_Names == "OBIS") {
 
 			if ($ConsumptionMain == true) {
 				$effective_power_mainID = $this->GetIDForIdent('effective_power_main');
@@ -317,7 +351,7 @@ if (!defined('vtBoolean')) {
 		}
 		
 		
-		if ($ConsumptionGas == 1 AND $manufacturerId == "ELS") {
+		if ($ConsumptionGas == 1 AND $Meter_Field_Names == "GAS") {
 			$gas_usageID = $this->GetIDForIdent('gas_usageID');
 			$CalculatedCostID = $this->GetIDForIdent('CalculatedCost');
 			AC_SetLoggingStatus($archiveID, $gas_usageID, true);
@@ -337,6 +371,7 @@ if (!defined('vtBoolean')) {
 		
 		$meterid = GetValue($this->GetIDForIdent('meterID'));
 		$manufacturerId = GetValue($this->GetIDForIdent('manufacturerId'));
+		$Meter_Field_Names = GetValue($this->GetIDForIdent("meter_field_names"));
 
 		$curl = curl_init('https://api.discovergy.com/public/v1/last_reading?meterId='.$meterid);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
@@ -354,7 +389,8 @@ if (!defined('vtBoolean')) {
 
 		if ($data != NULL) {
 			
-			if ($manufacturerId == "ESY") {
+			//if ($manufacturerId == "ESY") {
+			if ($Meter_Field_Names == "NON-OBIS") {
 				$this->SendDebug($this->Translate('ESY Meter'),$this->Translate('*********************************************************************'),0);
 				$energy_raw = $data->values->energy;
 				$energy = $energy_raw / 10000000000;
@@ -451,7 +487,7 @@ if (!defined('vtBoolean')) {
 				
 			}
 
-			else if ($manufacturerId == "EMH") {
+			else if ($Meter_Field_Names == "OBIS") {
 				$this->SendDebug($this->Translate('EMH Meter'),$this->Translate('*********************************************************************'),0);
 				$effective_power_complete_raw = $data->values->{'1.8.0'};
 				$effective_power_complete = $effective_power_complete_raw / 1000000;
@@ -482,14 +518,15 @@ if (!defined('vtBoolean')) {
 				$sold_power_secondary = $sold_power_secondary_raw / 1000000;
 				SetValue($this->GetIDForIdent('sold_power_secondary'), $sold_power_secondary);
 				$this->SendDebug($this->Translate('EMH Meter'),$this->Translate('Sold Power Complete NT: ').round($sold_power_secondary,3)." kWh",0);
-				/*
+				
 				$current_power_raw = $data->values->{'1.25'};
 				$current_power = $current_power_raw / 1000;
 				SetValue($this->GetIDForIdent('current_power'), $current_power);
-				*/
+				$this->SendDebug($this->Translate('EMH Meter'),$this->Translate('Current Power: ').round($current_power,3)." kWh",0);
+				
 			}
 			
-			else if ($manufacturerId == "ELS") {
+			else if ($Meter_Field_Names == "GAS") {
 				
 				$gas_raw = $data->values->volume;
 				$gas_usage = $gas_raw / 1000;
@@ -652,10 +689,11 @@ if (!defined('vtBoolean')) {
 		
 		$manufacturerId = GetValue($this->GetIDForIdent('manufacturerId'));
 		$CostCalculatorInterval = $this->ReadPropertyInteger("TimerCostCalculator");
+		$Meter_Field_Names = GetValue($this->GetIDForIdent("meter_field_names"));
 
 		SetValue($this->GetIDForIdent('CostCalculationMethod'),$this->ReadPropertyInteger("CostCalculationMethod")); 
 
-		if ($manufacturerId == "ESY") {
+		if ($Meter_Field_Names == "NON-OBIS") {
 
 			//Calculate Consumption
 			$archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
@@ -720,7 +758,7 @@ if (!defined('vtBoolean')) {
 			}
 		}
 
-		else if ($manufacturerId == "EMH") {
+		else if ($Meter_Field_Names == "OBIS") {
 			//$this->SendDebug($this->Translate('Cost Calculation'),"EMH Schleife",0);
 
 			//Calculate Consumption
@@ -833,7 +871,7 @@ if (!defined('vtBoolean')) {
 			}
 		}
 
-		else if ($manufacturerId == "ELS") {
+		else if ($Meter_Field_Names == "GAS") {
 
 			//Calculate Consumption
 			$archiveID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
@@ -903,8 +941,9 @@ if (!defined('vtBoolean')) {
 
 				$meterid = $meter->meterId;
 				$manufacturerId = $meter->manufacturerId;
+				$measurementType = $meter->measurementType;
 				
-				echo "UID ".trim($meterid)." Type ".$manufacturerId." // ";
+				echo "UID ".trim($meterid)." Meter Brand ".$manufacturerId." Meter Type.".$measurementType." // ";
 				
 			}
 		}	

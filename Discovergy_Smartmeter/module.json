@@ -9,7 +9,9 @@
         "ComMetering Smartmeter",
         "aWATTar Smartmeter",
         "eprimo Smartmeter",
-        "Tibber Smartmeter"
+        "Tibber Smartmeter",
+        "Stromdao Smartmeter",
+        "corrently Smartmeter"
     ],
     "parentRequirements": [],
     "childRequirements": [],
