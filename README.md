@@ -48,4 +48,8 @@ Daten Einspeisezähler:
 ## Version 2.13 (01.09.2021)
 * Fix um Fehler beim Abruf von Tibber abzufangen
 
+## Version 2.2 (04.01.2022)
+* Unterstützung für OBIS 1.25 bei EMH SmartMeter
+* Methode zur Erkennung von Zählern geändert - jetzt basierend auf verfügbaren Feldwerten
+
 Sollten weitere Zähler benötigt werden bitte im Forum https://www.symcon.de/forum/threads/43805-Modul-Discovergy-Smartmeter-die-zweite-f%C3%BCr-Module-Store  posten. Für den Einbau benötige ich 'manufacturerId' und evtl. ein Beispiel JSON. Bitte melden.
