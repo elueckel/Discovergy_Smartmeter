@@ -553,7 +553,9 @@ if (!defined('vtBoolean')) {
 		else if ($CostCalculationMethod == 2) {
 			$BasePrice = $this->ReadPropertyString("BasePrice");
 			
-			$curl = curl_init('https://api-test.awattar.de/v1/optimizer');
+			//$curl = curl_init('https://api-test.awattar.de/v1/optimizer');
+			$CurrentTime = time();
+			$curl = curl_init('https://api.awattar.de/v1/marketdata?start='.$CurrentTime."000");
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
 			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
@@ -566,7 +568,9 @@ if (!defined('vtBoolean')) {
 
 			$data = json_decode($json);
 
-			$CurrentPriceMWh = $data->data->current->price;
+			//$CurrentPriceMWh = $data->data->current->price;
+			$CurrentPriceMWh = $data->data[0]->marketprice;
+			
 			$CurrentPrice = $CurrentPriceMWh / 1000;
 			$this->SendDebug($this->Translate('aWATTar'),$this->Translate('Current cost per kWh: ').$CurrentPrice,0);
 			$CostEnergykWh = $BasePrice + ($CurrentPrice * 1.19);
