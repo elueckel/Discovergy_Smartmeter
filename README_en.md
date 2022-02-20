@@ -61,4 +61,7 @@ In general different meters provide different data points. Please also check the
 * Added support for Current Power 1.25 for EMH Readers
 * Changed identification of meters to the fields being used
 
+## Version 2.21 (20.02.2022)
+* Update for aWATTar API
+
 For other unsupported meters, please post a message into the forum: https://www.symcon.de/forum/threads/43805-Modul-Discovergy-Smartmeter-die-zweite-f%C3%BCr-Module-Store?highlight=smartmeter
