@@ -29,7 +29,7 @@ In general different meters provide different data points. Please also check the
 * Consumption Phase 1-3
 * Voltage Phase 1-3
 
-## Version 1.01 (25.06.2020)
+## Version 1.0.1 (25.06.2020)
 * Reading of Gasmeter in m³
 * Enhanced variables for EMH Meter
 * Added CURL Timeout
@@ -47,21 +47,21 @@ In general different meters provide different data points. Please also check the
 * Updated config UI
 * Hopefully now Module store compliant while still enabling automatic archiving
 
-## Version 2.11 (25.01.2021)
+## Version 2.1.1 (25.01.2021)
 * Added support for another ESY Meter (Voltage and Power had not been displayed)
 * Localization fixes
 
-## Version 2.12 (10.04.2021)
+## Version 2.1.2 (10.04.2021)
 * Fix Phase 2 Power was wrongly calculated
 
-## Version 2.13 (01.09.2021)
+## Version 2.1.3 (01.09.2021)
 * Fix to handle data acquisition from Tibber better
 
 ## Version 2.2 (04.01.2022)
 * Added support for Current Power 1.25 for EMH Readers
 * Changed identification of meters to the fields being used
 
-## Version 2.21 (20.02.2022)
+## Version 2.2.1 (18.06.2022)
 * Update for aWATTar API
 
 For other unsupported meters, please post a message into the forum: https://www.symcon.de/forum/threads/43805-Modul-Discovergy-Smartmeter-die-zweite-f%C3%BCr-Module-Store?highlight=smartmeter
