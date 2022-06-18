@@ -38,21 +38,21 @@ Daten Einspeisezähler:
 * Update Konfigurations UI
 * Hoffentlich jetzt kompatibel mit dem Module Store obwohl die Archivierung immer noch automatisch aktivert wird
 
-## Version 2.11 (25.01.2021)
+## Version 2.1.1 (25.01.2021)
 * Erweiterung für weitere ESY Zähler (vorheriger Fehler es wurde Spannung und Leistung der Phasen nicht angezeigt)
 * Lokalisierungsupdate
 
-## Version 2.12 (10.04.2021)
+## Version 2.1.2 (10.04.2021)
 * Fix Phase 2 Leistung wurde falsch ausgewertet
 
-## Version 2.13 (01.09.2021)
+## Version 2.1.3 (01.09.2021)
 * Fix um Fehler beim Abruf von Tibber abzufangen
 
 ## Version 2.2 (04.01.2022)
 * Unterstützung für OBIS 1.25 bei EMH SmartMeter
 * Methode zur Erkennung von Zählern geändert - jetzt basierend auf verfügbaren Feldwerten
 * 
-## Version 2.21 (20.02.2022)
+## Version 2.2.1 (18.06.2022)
 * Update bei aWATTar API 
 
 Sollten weitere Zähler benötigt werden bitte im Forum https://www.symcon.de/forum/threads/43805-Modul-Discovergy-Smartmeter-die-zweite-f%C3%BCr-Module-Store  posten. Für den Einbau benötige ich 'manufacturerId' und evtl. ein Beispiel JSON. Bitte melden.
